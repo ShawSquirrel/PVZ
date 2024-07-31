@@ -1,6 +1,6 @@
 ﻿namespace GameLogic
 {
-    public abstract class Entity
+    public interface IEntity
     {
         
     }

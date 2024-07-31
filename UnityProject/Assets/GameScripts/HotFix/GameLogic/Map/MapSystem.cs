@@ -36,16 +36,16 @@ namespace GameLogic
                         case 0:
                             mapItem.GetComponent<MeshRenderer>().material.color = Color.gray;
                             mapData.MapItem = new MapItem_Space();
+                            
                             break;
                         case 1:
                             mapItem.GetComponent<MeshRenderer>().material.color = Color.green;
                             mapData.MapItem = new MapItem_Grassland();
                             break;
                     }
+                    (mapData.MapItem as IPos)?.SetPos(mapItem.transform.position);
 
-
-                    ((IMapItemMouseEvent)mapData.MapItem).MapItemMouseEvent = mapItem.AddComponent<MapItemMouseEvent>();
-                    ((IMapItemMouseEvent)mapData.MapItem).MapItemMouseEvent.MapItemIndex = index;
+                    mapItem.AddComponent<MapItemMouseEvent>().MapItemIndex = index;
                 }
             }
         }

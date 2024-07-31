@@ -27,6 +27,7 @@ namespace GameLogic
                 {
                     Object.Destroy(SelectPrincessPrefab);
                 }
+
                 SelectPrincessPrefab = null;
                 return;
             }
@@ -37,10 +38,14 @@ namespace GameLogic
         public void Plant(Vector2Int mapItemIndex)
         {
             MapData mapData = Battle.Instance.MapSystem.MapDataDict[mapItemIndex];
-            if (mapData.Princess == null && (ICanPlanted)mapData.MapItem != null)
+            if (mapData.Princess == null && mapData.MapItem is ICanPlanted canPlanted)
             {
                 mapData.Princess = new Princess_CaoYeYouYi();
-                SelectPrincessPrefab.transform.position = (mapData.MapItem as IMapItemMouseEvent).MapItemMouseEvent.transform.position;
+                if (mapData.MapItem is IPos pos)
+                {
+                    SelectPrincessPrefab.transform.position = pos.GetPos();
+                }
+
                 SelectPrincessPrefab = null;
                 SelectedPrincessType.Value = EPrincessType.Null;
                 GameEvent.Send(UIEvent.ResetSelectPrincess);

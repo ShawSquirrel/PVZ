@@ -9,7 +9,7 @@ namespace GameLogic
         public Vector2Int MapItemIndex;
         private void OnMouseEnter()
         {
-            Log.Debug($"MapItemMouseEvent :: OnMouseEnter {transform.name}");
+            // Log.Debug($"MapItemMouseEvent :: OnMouseEnter {transform.name}");
         }
 
         private void OnMouseDown()

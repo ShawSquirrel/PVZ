@@ -7,5 +7,7 @@
         {
             
         }
+
+        public MapItemMouseEvent MapItemMouseEvent { get; set; }
     }
 }

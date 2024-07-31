@@ -1,6 +1,6 @@
 ﻿namespace GameLogic
 {
-    public interface IMapItem
+    public interface IMapItem : IMapItemMouseEvent
     {
         public EMapItemType MapItemType { get;}
     }

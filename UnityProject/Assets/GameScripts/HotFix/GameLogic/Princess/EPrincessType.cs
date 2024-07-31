@@ -3,6 +3,7 @@
     public enum EPrincessType
     {
         Null,
-        CaoYeYouYi
+        CaoYeYouYi,
+        PeiKeLiMu,
     }
 }

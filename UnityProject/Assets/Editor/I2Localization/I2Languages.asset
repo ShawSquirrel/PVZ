@@ -17,15 +17,6 @@ MonoBehaviour:
     UserAgreesToHaveItInsideThePluginsFolder: 0
     GoogleLiveSyncIsUptoDate: 1
     mTerms:
-    - Term: Button
-      TermType: 0
-      Description: 
-      Languages:
-      - "\u5F00\u59CB\u6E38\u620F"
-      - Start Game
-      - "\u30B2\u30FC\u30E0\u3092\u30B9\u30BF\u30FC\u30C8"
-      Flags: 000000
-      Languages_Touch: []
     - Term: Menu
       TermType: 0
       Description: 
@@ -33,6 +24,15 @@ MonoBehaviour:
       - "\u83DC\u5355"
       - Menu
       - "\u30E1\u30CB\u30E5\u30FC"
+      Flags: 000000
+      Languages_Touch: []
+    - Term: StartGame
+      TermType: 0
+      Description: 
+      Languages:
+      - "\u5F00\u59CB\u6E38\u620F"
+      - Start Game
+      - "\u30B2\u30FC\u30E0\u3092\u30B9\u30BF\u30FC\u30C8"
       Flags: 000000
       Languages_Touch: []
     CaseInsensitiveTerms: 0

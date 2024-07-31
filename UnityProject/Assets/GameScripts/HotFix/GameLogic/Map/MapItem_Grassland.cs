@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using TEngine;
+using UnityEngine;
 
 namespace GameLogic
 {
-    public class MapItem_Grassland : IEntity, IMapItem, ICanPlanted, IPos
+    public partial class MapItem_Grassland : IEntity, IMapItem, ICanPlanted, IPos
     {
         public EMapItemType MapItemType => EMapItemType.Grassland;
         public void Planted(ICanPlant canPlant)
@@ -24,4 +25,11 @@ namespace GameLogic
     }
 
 
+    public partial class MapItem_Grassland : ObjectBase
+    {
+        protected override void Release(bool isShutdown)
+        {
+            
+        }
+    }
 }

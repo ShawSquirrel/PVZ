@@ -12,7 +12,6 @@ namespace GameLogic
         public async UniTask MapGenerate(int[,] matrix)
         {
             GameObject parent = new GameObject("MapRoot");
-            GameObject mapItemPrefab = await GameModule.Resource.LoadAssetAsync<GameObject>("MapItem");
             int width = matrix.GetLength(0);
             int height = matrix.GetLength(1);
             for (int i = 0; i < width; i++)
@@ -35,12 +34,11 @@ namespace GameLogic
                     {
                         case 0:
                             mapItem.GetComponent<MeshRenderer>().material.color = Color.gray;
-                            mapData.MapItem = new MapItem_Space();
-                            
+                            mapData.MapItem = PoolHelper.Spawn<MapItem_Space>();
                             break;
                         case 1:
                             mapItem.GetComponent<MeshRenderer>().material.color = Color.green;
-                            mapData.MapItem = new MapItem_Grassland();
+                            mapData.MapItem = PoolHelper.Spawn<MapItem_Grassland>();
                             break;
                     }
                     (mapData.MapItem as IPos)?.SetPos(mapItem.transform.position);

@@ -2,7 +2,7 @@
 {
     public class MapData
     {
-        public IMapItem MapItem;
+        public AMapItem MapItem;
         public IPrincess Princess;
     }
 }

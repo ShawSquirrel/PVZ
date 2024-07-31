@@ -40,11 +40,8 @@ namespace GameLogic
             MapData mapData = Battle.Instance.MapSystem.MapDataDict[mapItemIndex];
             if (mapData.Princess == null && mapData.MapItem is ICanPlanted canPlanted)
             {
-                mapData.Princess = new Princess_CaoYeYouYi();
-                if (mapData.MapItem is IPos pos)
-                {
-                    SelectPrincessPrefab.transform.position = pos.GetPos();
-                }
+                mapData.Princess                        = new Princess_CaoYeYouYi();
+                SelectPrincessPrefab.transform.position = mapData.MapItem.TF.position;
 
                 SelectPrincessPrefab = null;
                 SelectedPrincessType.Value = EPrincessType.Null;

@@ -5,7 +5,7 @@ namespace GameLogic
 {
     public static class PoolHelper
     {
-        public static T Spawn<T>() where T : ObjectBase
+        public static T Spawn<T>() where T : ObjectBase, new()
         {
             T ret = null;
             Type type = typeof(T);
@@ -20,7 +20,11 @@ namespace GameLogic
             {
                 if (type == typeof(MapItem_Space))
                 {
-                    ret = MapItem_Space.Create() as T;
+                    ret = MapItem_Space.CreateInstance() as T;
+                }
+                else if (type == typeof(MapItem_Grassland))
+                {
+                    ret = MapItem_Grassland.CreateInstance() as T;
                 }
                 _actorPool.Register(ret,true);
             }

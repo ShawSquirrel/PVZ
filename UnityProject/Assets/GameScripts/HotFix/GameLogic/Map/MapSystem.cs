@@ -11,7 +11,7 @@ namespace GameLogic
 
         public async UniTask MapGenerate(int[,] matrix)
         {
-            GameObject parent = new GameObject("MapRoot");
+            Transform parent = new GameObject("MapRoot").transform;
             int width = matrix.GetLength(0);
             int height = matrix.GetLength(1);
             for (int i = 0; i < width; i++)
@@ -26,24 +26,25 @@ namespace GameLogic
                         MapDataDict.Add(index, mapData);
                     }
 
-                    GameObject mapItem = Object.Instantiate(mapItemPrefab, parent.transform);
-                    mapItem.name = $"{index}";
-                    mapItem.transform.localPosition = new Vector3(-width / 2f + i, height / 2f - j);
+                    AMapItem mapItem;
 
                     switch (matrix[i, j])
                     {
                         case 0:
-                            mapItem.GetComponent<MeshRenderer>().material.color = Color.gray;
-                            mapData.MapItem = PoolHelper.Spawn<MapItem_Space>();
+                            mapItem = PoolHelper.Spawn<MapItem_Space>();
                             break;
                         case 1:
-                            mapItem.GetComponent<MeshRenderer>().material.color = Color.green;
-                            mapData.MapItem = PoolHelper.Spawn<MapItem_Grassland>();
+                            mapItem = PoolHelper.Spawn<MapItem_Grassland>();
+                            break;
+                        default:
+                            mapItem = PoolHelper.Spawn<MapItem_Space>();
                             break;
                     }
-                    (mapData.MapItem as IPos)?.SetPos(mapItem.transform.position);
 
-                    mapItem.AddComponent<MapItemMouseEvent>().MapItemIndex = index;
+                    mapItem.TF.position = new Vector3(-width / 2f + i, height / 2f - j);
+                    mapItem.TF.name     = index.ToString();
+                    mapItem.TF.SetParent(parent);
+                    mapItem.Obj.AddComponent<MapItemMouseEvent>().MapItemIndex = index;
                 }
             }
         }

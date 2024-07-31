@@ -3,33 +3,20 @@ using UnityEngine;
 
 namespace GameLogic
 {
-    public partial class MapItem_Grassland : IEntity, IMapItem, ICanPlanted, IPos
+    public partial class MapItem_Grassland : AMapItem, ICanPlanted
     {
         public EMapItemType MapItemType => EMapItemType.Grassland;
+
         public void Planted(ICanPlant canPlant)
         {
-            
         }
 
-        public Vector3 Position { get; set; }
-        public Vector3 GetPos()
+        public static MapItem_Grassland CreateInstance()
         {
-            return Position;
-        }
-
-        public void SetPos(Vector3 pos)
-        {
-            Position = pos;
-        }
-
-    }
-
-
-    public partial class MapItem_Grassland : ObjectBase
-    {
-        protected override void Release(bool isShutdown)
-        {
-            
+            MapItem_Grassland ret = MemoryPool.Acquire<MapItem_Grassland>();
+            GameObject target = Object.Instantiate(GameModule.Resource.LoadAsset<GameObject>("MapItem"));
+            ret.Initialize($"{nameof(MapItem_Grassland)}", target);
+            return ret;
         }
     }
 }

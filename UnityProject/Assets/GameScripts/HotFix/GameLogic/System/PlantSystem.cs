@@ -10,7 +10,7 @@ namespace GameLogic
         public bool CanPlant => SelectedPrincessType.Value != EPrincessType.Null;
 
         public BindValue<EPrincessType> SelectedPrincessType = new BindValue<EPrincessType>();
-        private GameObject SelectPrincessPrefab;
+        private APrincess SelectPrincess;
 
         public void Init()
         {
@@ -19,20 +19,36 @@ namespace GameLogic
         }
 
 
-        private void OnSelectedPrincessTypeChanged(EPrincessType princessType)
+        private void OnSelectedPrincessTypeChanged(EPrincessType lastPrincessType, EPrincessType currentPrincessType)
         {
-            if (princessType == EPrincessType.Null)
+            if (currentPrincessType == EPrincessType.Null)
             {
-                if (SelectPrincessPrefab != null)
+                if (SelectPrincess != null)
                 {
-                    Object.Destroy(SelectPrincessPrefab);
+                    switch (lastPrincessType)
+                    {
+                        case EPrincessType.CaoYeYouYi:
+                            PoolHelper.UnSpawn(SelectPrincess as Princess_CaoYeYouYi);
+                            break;
+                        case EPrincessType.PeiKeLiMu:
+                            PoolHelper.UnSpawn(SelectPrincess as Princess_CaoYeYouYi);
+                            break;
+                    }
+                    
                 }
 
-                SelectPrincessPrefab = null;
+                SelectPrincess = null;
                 return;
             }
-
-            SelectPrincessPrefab = Object.Instantiate(GameModule.Resource.LoadAsset<GameObject>($"Princess_{princessType}"));
+            switch (currentPrincessType)
+            {
+                case EPrincessType.CaoYeYouYi:
+                    SelectPrincess = PoolHelper.Spawn<Princess_CaoYeYouYi>();
+                    break;
+                case EPrincessType.PeiKeLiMu:
+                    SelectPrincess = PoolHelper.Spawn<Princess_CaoYeYouYi>();
+                    break;
+            }
         }
 
         public void Plant(Vector2Int mapItemIndex)
@@ -40,20 +56,21 @@ namespace GameLogic
             MapData mapData = Battle.Instance.MapSystem.MapDataDict[mapItemIndex];
             if (mapData.Princess == null && mapData.MapItem is ICanPlanted canPlanted)
             {
-                mapData.Princess                        = new Princess_CaoYeYouYi();
-                SelectPrincessPrefab.transform.position = mapData.MapItem.TF.position;
+                mapData.Princess = SelectPrincess;
 
-                SelectPrincessPrefab = null;
+                SelectPrincess.TF.position = mapData.MapItem.TF.position;
+                SelectPrincess = null;
                 SelectedPrincessType.Value = EPrincessType.Null;
                 GameEvent.Send(UIEvent.ResetSelectPrincess);
+                
             }
         }
 
         private void OnUpdate()
         {
-            if (SelectPrincessPrefab != null)
+            if (SelectPrincess != null)
             {
-                SelectPrincessPrefab.transform.position = MouseHelper.GetMouseToWorld();
+                SelectPrincess.TF.position = MouseHelper.GetMouseToWorld();
             }
         }
     }

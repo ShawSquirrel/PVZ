@@ -4,7 +4,7 @@ namespace GameLogic
 {
     public class BindValue<T>
     {
-        private Action<T> OnValueChange;
+        private Action<T, T> OnValueChange;
         private T _value;
 
         public T Value
@@ -13,8 +13,8 @@ namespace GameLogic
             set
             {
                 if (value.Equals(_value)) return;
+                OnValueChange?.Invoke(_value, value);
                 _value = value;
-                OnValueChange?.Invoke(_value);
             }
         }
 
@@ -23,7 +23,7 @@ namespace GameLogic
             _value = value;
         }
         
-        public void AddListener(Action<T> onValueChange)
+        public void AddListener(Action<T, T> onValueChange)
         {
             OnValueChange = onValueChange;
         }

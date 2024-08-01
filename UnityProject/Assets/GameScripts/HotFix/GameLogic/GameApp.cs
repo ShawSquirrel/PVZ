@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Cysharp.Threading.Tasks;
@@ -7,6 +8,7 @@ using TEngine;
 /// <summary>
 /// 游戏App。
 /// </summary>
+[Serializable]
 public partial class GameApp : Singleton<GameApp>
 {
     private static List<Assembly> _hotfixAssembly;

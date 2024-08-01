@@ -7,6 +7,12 @@ namespace GameLogic
     {
         public EMapItemType MapItemType => EMapItemType.Grassland;
 
+        protected override void MapItemInitialize()
+        {
+            base.MapItemInitialize();
+            SetColor(Color.green);
+        }
+
         public void Planted(ICanPlant canPlant)
         {
         }

@@ -1,10 +1,11 @@
 ﻿using Cysharp.Threading.Tasks;
 using GameLogic;
 using TEngine;
+using UnityEngine;
 
 public partial class GameApp
 {
-    private Battle _battle;
+    public Battle Battle;
 
     private void AddLogicSystemMain()
     {
@@ -12,6 +13,7 @@ public partial class GameApp
 
     private async UniTask StartMain()
     {
+        new GameObject("GameRoot").AddComponent<GameRoot>().GameApp = this;
         await GameInit();
 
         GameModule.UI.ShowUIAsync<UI_Main>();

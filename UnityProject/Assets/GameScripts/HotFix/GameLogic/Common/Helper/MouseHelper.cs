@@ -22,11 +22,11 @@ namespace GameLogic
                 Vector3 hitPoint = hit.point;
 
                 // 打印或处理击中位置
-                // Log.Debug("Mouse position in 3D world: " + hitPoint);
+                Log.Debug("Mouse position in 3D world: " + hitPoint);
 
                 return hitPoint;
             }
-            // Log.Warning("Ray cast lost");
+            Log.Warning("Ray cast lost");
             return Vector3.zero;
         }
     }

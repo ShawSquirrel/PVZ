@@ -41,8 +41,10 @@ namespace GameLogic
                             break;
                     }
 
+                    mapData.MapItem = mapItem;
+                    
                     mapItem.TF.position = new Vector3(-width / 2f + i, height / 2f - j);
-                    mapItem.TF.name     = index.ToString();
+                    mapItem.TF.name = index.ToString();
                     mapItem.TF.SetParent(parent);
                     mapItem.Obj.AddComponent<MapItemMouseEvent>().MapItemIndex = index;
                 }

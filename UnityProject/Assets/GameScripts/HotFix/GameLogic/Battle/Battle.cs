@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using GameBase;
 using TEngine;
@@ -6,14 +7,12 @@ using UnityEngine;
 
 namespace GameLogic
 {
+    [Serializable]
     public class Battle : Singleton<Battle>
     {
         public PlantSystem PlantSystem = new PlantSystem();
-
-
         public MapSystem MapSystem = new MapSystem();
-
-
+        
         protected override void Init()
         {
             base.Init();

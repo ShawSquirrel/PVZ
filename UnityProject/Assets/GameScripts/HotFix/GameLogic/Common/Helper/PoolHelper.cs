@@ -9,27 +9,42 @@ namespace GameLogic
         {
             T ret = null;
             Type type = typeof(T);
-            IObjectPool<T> _actorPool = GameModule.ObjectPool.GetObjectPool<T>();
-            _actorPool ??= GameModule.ObjectPool.CreateSingleSpawnObjectPool<T>();
+            IObjectPool<T> objectPool = GameModule.ObjectPool.GetObjectPool<T>();
+            objectPool ??= GameModule.ObjectPool.CreateSingleSpawnObjectPool<T>();
             
-            if (_actorPool.CanSpawn())
+            if (objectPool.CanSpawn())
             {
-                ret = _actorPool.Spawn();
+                ret = objectPool.Spawn();
             }
             else
             {
                 if (type == typeof(MapItem_Space))
                 {
-                    ret = MapItem_Space.CreateInstance() as T;
+                    ret = AMapItem.CreateInstance<MapItem_Space>() as T;
                 }
                 else if (type == typeof(MapItem_Grassland))
                 {
-                    ret = MapItem_Grassland.CreateInstance() as T;
+                    ret = AMapItem.CreateInstance<MapItem_Grassland>() as T;
                 }
-                _actorPool.Register(ret,true);
+                else if (type == typeof(Princess_CaoYeYouYi))
+                {
+                    ret = APrincess.CreateInstance<Princess_CaoYeYouYi>(EPrincessType.CaoYeYouYi) as T;
+                }
+                objectPool.Register(ret,true);
             }
 
             return ret;
+        }
+        public static void UnSpawn<T>(T needUnSpawn) where T : ObjectBase, new()
+        {
+            IObjectPool<T> objectPool = GameModule.ObjectPool.GetObjectPool<T>();
+
+            if (objectPool == null)
+            {
+                Log.Error($"UnSpawn Error Type : {typeof(T)}");
+                return;
+            }
+            objectPool.Unspawn(needUnSpawn);
         }
     }
 }

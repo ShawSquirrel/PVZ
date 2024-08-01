@@ -1,8 +1,8 @@
 ﻿namespace GameLogic
 {
-    public class Princess_CaoYeYouYi : IEntity, IPrincess, ICanPlant
+    public class Princess_CaoYeYouYi : APrincess, ICanPlant
     {
-        public EPrincessType PrincessType => EPrincessType.CaoYeYouYi;
+        public override EPrincessType PrincessType => EPrincessType.CaoYeYouYi;
 
         public void Plant(ICanPlanted canPlanted)
         {

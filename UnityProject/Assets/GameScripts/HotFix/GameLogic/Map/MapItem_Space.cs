@@ -6,7 +6,14 @@ namespace GameLogic
     public partial class MapItem_Space : AMapItem
     {
         public EMapItemType MapItemType => EMapItemType.Scpace;
-        
+
+
+        protected override void MapItemInitialize()
+        {
+            base.MapItemInitialize();
+            SetColor(Color.yellow);
+        }
+
         public static MapItem_Space CreateInstance()
         {
             MapItem_Space ret = MemoryPool.Acquire<MapItem_Space>();

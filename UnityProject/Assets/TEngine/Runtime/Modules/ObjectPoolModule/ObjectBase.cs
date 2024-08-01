@@ -85,6 +85,16 @@ namespace TEngine
         {
             Initialize(name, target, false, 0);
         }
+        
+        /// <summary>
+        /// 初始化对象基类。
+        /// </summary>
+        /// <param name="name">对象名称。</param>
+        /// <param name="target">对象。</param>
+        public void Initialize_Out(string name, object target)
+        {
+            Initialize(name, target, false, 0);
+        }
 
         /// <summary>
         /// 初始化对象基类。
@@ -127,6 +137,12 @@ namespace TEngine
             _locked = locked;
             _priority = priority;
             _lastUseTime = DateTime.UtcNow;
+
+            EndObjectInitialize();
+        }
+
+        protected virtual void EndObjectInitialize()
+        {
         }
 
         /// <summary>

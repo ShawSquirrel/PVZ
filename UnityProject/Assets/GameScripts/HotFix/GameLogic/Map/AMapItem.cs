@@ -1,7 +1,5 @@
-﻿using System;
-using TEngine;
+﻿using TEngine;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace GameLogic
 {
@@ -15,11 +13,28 @@ namespace GameLogic
         {
         }
 
-        protected override void OnSpawn()
+        protected override void EndObjectInitialize()
         {
-            base.OnSpawn();
-            Obj ??= (Target as GameObject);
-            TF  ??= (Target as GameObject).transform;
+            Obj ??= Target as GameObject;
+            TF  ??= Obj.transform;
+            MapItemInitialize();
+        }
+
+        protected virtual void MapItemInitialize()
+        {
+            
+        }
+        public void SetColor(Color color)
+        {
+            Obj.GetComponent<SpriteRenderer>().color = color;
+        }
+        
+        public static T CreateInstance<T>() where T : ObjectBase, new()
+        {
+            T ret = MemoryPool.Acquire<T>();
+            GameObject target = Object.Instantiate(GameModule.Resource.LoadAsset<GameObject>("MapItem"));
+            ret.Initialize_Out($"{typeof(T).Name}", target);
+            return ret;
         }
     }
 }

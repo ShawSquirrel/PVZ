@@ -44,9 +44,9 @@ namespace TEngine
                 m_AssetHandle = null;
             }
 
-            protected internal override void OnUnspawn()
+            protected internal override void OnUnSpawn()
             {
-                base.OnUnspawn();
+                base.OnUnSpawn();
             }
 
             protected internal override void Release(bool isShutdown)

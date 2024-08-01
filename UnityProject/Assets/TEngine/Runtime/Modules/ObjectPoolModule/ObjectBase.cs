@@ -166,7 +166,7 @@ namespace TEngine
         /// <summary>
         /// 回收对象时的事件。
         /// </summary>
-        protected internal virtual void OnUnspawn()
+        protected internal virtual void OnUnSpawn()
         {
         }
 

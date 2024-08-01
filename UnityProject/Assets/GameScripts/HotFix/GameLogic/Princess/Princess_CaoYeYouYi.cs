@@ -1,11 +1,12 @@
 ﻿namespace GameLogic
 {
-    public class Princess_CaoYeYouYi : APrincess, ICanPlant
+    public class Princess_CaoYeYouYi : APrincess
     {
         public override EPrincessType PrincessType => EPrincessType.CaoYeYouYi;
 
-        public void Plant(ICanPlanted canPlanted)
+        public override bool Plant(AMapItem mapItem)
         {
+            return CanPlant(mapItem);
         }
     }
 }

@@ -48,14 +48,16 @@ namespace GameLogic
                             break;
                     }
 
-                    mapData.MapItem = mapItem;
+                    mapData._MapItem = mapItem;
                     
-                    mapItem.TF.position = new Vector3(-width / 2f + i, height / 2f - j);
-                    mapItem.TF.name = index.ToString();
-                    mapItem.TF.SetParent(_parent);
-                    mapItem.Obj.AddComponent<MapItemMouseEvent>().MapItemIndex = index;
+                    mapItem._TF.position = new Vector3(-width / 2f + i, height / 2f - j);
+                    mapItem._TF.name = index.ToString();
+                    mapItem._TF.SetParent(_parent);
+                    mapItem._Obj.AddComponent<MapItemMouseEvent>().MapItemIndex = index;
                 }
             }
+
+            await UniTask.CompletedTask;
         }
     }
 }

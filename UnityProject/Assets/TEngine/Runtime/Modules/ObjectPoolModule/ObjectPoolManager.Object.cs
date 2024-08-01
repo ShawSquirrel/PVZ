@@ -166,7 +166,7 @@ namespace TEngine
             /// </summary>
             public void Unspawn()
             {
-                _object.OnUnspawn();
+                _object.OnUnSpawn();
                 _object.LastUseTime = DateTime.UtcNow;
                 _spawnCount--;
                 if (_spawnCount < 0)

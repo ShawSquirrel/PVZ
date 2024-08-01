@@ -4,7 +4,7 @@ namespace GameLogic
 {
     public interface IUnit
     {
-        public GameObject Obj { get; set; }
-        public Transform TF { get; set; }
+        public GameObject _Obj { get; set; }
+        public Transform _TF { get; set; }
     }
 }

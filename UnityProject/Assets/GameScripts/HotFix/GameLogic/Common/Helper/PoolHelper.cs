@@ -30,6 +30,10 @@ namespace GameLogic
                 {
                     ret = APrincess.CreateInstance<Princess_CaoYeYouYi>(EPrincessType.CaoYeYouYi) as T;
                 }
+                else if (type == typeof(Princess_PeiKeLiMu))
+                {
+                    ret = APrincess.CreateInstance<Princess_PeiKeLiMu>(EPrincessType.PeiKeLiMu) as T;
+                }
                 objectPool.Register(ret,true);
             }
 

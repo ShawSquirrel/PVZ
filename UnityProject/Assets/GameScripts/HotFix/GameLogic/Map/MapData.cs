@@ -1,8 +1,11 @@
-﻿namespace GameLogic
+﻿using UnityEngine;
+
+namespace GameLogic
 {
     public class MapData
     {
-        public AMapItem MapItem;
-        public IPrincess Princess;
+        public Vector2Int _Index;
+        public AMapItem _MapItem;
+        public APrincess _Princess;
     }
 }

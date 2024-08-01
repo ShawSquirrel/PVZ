@@ -3,37 +3,37 @@ using UnityEngine;
 
 namespace GameLogic
 {
-    public class APrincess : ObjectBase, IPrincess, IUnit
+    public class APrincess : ObjectBase, IPrincess, IUnit, IPlant
     {
-        public GameObject Obj { get; set; }
-        public Transform TF { get; set; }
+        public GameObject _Obj { get; set; }
+        public Transform _TF { get; set; }
 
         public virtual EPrincessType PrincessType { get; }
 
         protected override void Release(bool isShutdown)
         {
-            if (Obj != null)
+            if (_Obj != null)
             {
-                Object.Destroy(Obj);
+                Object.Destroy(_Obj);
             }
         }
 
         protected override void OnSpawn()
         {
             base.OnSpawn();
-            Obj.SetActiveSelf(true);
+            _Obj.SetActiveSelf(true);
         }
 
-        protected override void OnUnspawn()
+        protected override void OnUnSpawn()
         {
-            base.OnUnspawn();
-            Obj.SetActiveSelf(false);
+            base.OnUnSpawn();
+            _Obj.SetActiveSelf(false);
         }
 
         protected override void EndObjectInitialize()
         {
-            Obj = Target as GameObject;
-            TF = Obj.transform;
+            _Obj = Target as GameObject;
+            _TF = _Obj.transform;
         }
 
         public static T CreateInstance<T>(EPrincessType princessType) where T : ObjectBase, new()
@@ -42,6 +42,17 @@ namespace GameLogic
             GameObject target = Object.Instantiate(GameModule.Resource.LoadAsset<GameObject>($"Princess_{princessType}"));
             ret.Initialize_Out(target);
             return ret;
+        }
+
+        public virtual bool Plant(AMapItem mapItem)
+        {
+            return false;
+        }
+
+        protected bool CanPlant(AMapItem mapItem)
+        {
+            _TF.transform.position = mapItem._TF.position;
+            return true;
         }
     }
 }

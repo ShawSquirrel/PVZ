@@ -3,36 +3,40 @@ using UnityEngine;
 
 namespace GameLogic
 {
-    public class AMapItem : ObjectBase, IEntity, IMapItem, IUnit
+    public class AMapItem : ObjectBase, IEntity, IMapItem, IUnit, IPlanted
     {
-        public GameObject Obj { get; set; }
-        public Transform TF { get; set; }
+        public GameObject _Obj { get; set; }
+        public Transform _TF { get; set; }
         public virtual EMapItemType MapItemType { get; }
+        public virtual bool Planted()
+        {
+            return false;
+        }
 
         protected override void Release(bool isShutdown)
         {
-            if (Obj != null)
+            if (_Obj != null)
             {
-                Object.Destroy(Obj);
+                Object.Destroy(_Obj);
             }
         }
 
         protected override void OnSpawn()
         {
             base.OnSpawn();
-            Obj.SetActiveSelf(true);
+            _Obj.SetActiveSelf(true);
         }
 
-        protected override void OnUnspawn()
+        protected override void OnUnSpawn()
         {
-            base.OnUnspawn();
-            Obj.SetActiveSelf(false);
+            base.OnUnSpawn();
+            _Obj.SetActiveSelf(false);
         }
 
         protected override void EndObjectInitialize()
         {
-            Obj ??= Target as GameObject;
-            TF  ??= Obj.transform;
+            _Obj ??= Target as GameObject;
+            _TF  ??= _Obj.transform;
             MapItemInitialize();
         }
 
@@ -40,9 +44,10 @@ namespace GameLogic
         {
             
         }
-        public void SetColor(Color color)
+
+        protected void SetColor(Color color)
         {
-            Obj.GetComponent<SpriteRenderer>().color = color;
+            _Obj.GetComponent<SpriteRenderer>().color = color;
         }
         
         public static T CreateInstance<T>() where T : ObjectBase, new()

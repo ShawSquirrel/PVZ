@@ -2,6 +2,6 @@
 {
     public interface IAnim
     {
-        public IAnimComponent Anim { get; set; }
+        public IAnimComponent _Anim { get; set; }
     }
 }

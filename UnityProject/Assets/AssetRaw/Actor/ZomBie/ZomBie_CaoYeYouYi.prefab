@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2212044182513505288}
+  - component: {fileID: -7619749461330028460}
   m_Layer: 0
-  m_Name: Princess_CaoYeYouYi
+  m_Name: ZomBie_CaoYeYouYi
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,6 +33,33 @@ Transform:
   - {fileID: 1932146926497163981}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &-7619749461330028460
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5209179877376175106}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 1
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &7773170369134356259
 GameObject:
   m_ObjectHideFlags: 0
@@ -45,6 +73,7 @@ GameObject:
   - component: {fileID: 1116574325015159502}
   - component: {fileID: 2129667833326238171}
   - component: {fileID: 2236132615168804921}
+  - component: {fileID: 7105493300666563841}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -164,3 +193,24 @@ MonoBehaviour:
   _SkillPrefix: 100201
   _AnimState: 0
   _TestState: 0
+--- !u!65 &7105493300666563841
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7773170369134356259}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 9.125182, y: 9.139077, z: 0}
+  m_Center: {x: 0.44069004, y: 1.9427207, z: 0}

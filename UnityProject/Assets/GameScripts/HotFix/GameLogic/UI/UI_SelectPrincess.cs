@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using GameConfig;
 using UnityEngine;
 using UnityEngine.UI;
 using TEngine;

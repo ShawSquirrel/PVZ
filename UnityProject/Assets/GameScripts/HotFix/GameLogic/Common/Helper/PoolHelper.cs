@@ -1,4 +1,5 @@
 ﻿using System;
+using GameConfig;
 using TEngine;
 
 namespace GameLogic
@@ -26,6 +27,9 @@ namespace GameLogic
                 {
                     ret = AMapItem.CreateInstance<MapItem_Grassland>() as T;
                 }
+                
+                
+                
                 else if (type == typeof(Princess_CaoYeYouYi))
                 {
                     ret = APrincess.CreateInstance<Princess_CaoYeYouYi>(EPrincessType.CaoYeYouYi) as T;
@@ -34,6 +38,19 @@ namespace GameLogic
                 {
                     ret = APrincess.CreateInstance<Princess_PeiKeLiMu>(EPrincessType.PeiKeLiMu) as T;
                 }
+                
+                
+                else if (type == typeof(ZomBie_CaoYeYouYi))
+                {
+                    ret = AZonBie.CreateInstance<ZomBie_CaoYeYouYi>(EZombieType.CaoYeYouYi) as T;
+                }
+                else if (type == typeof(ZomBie_PeiKeLiMu))
+                {
+                    ret = AZonBie.CreateInstance<ZomBie_PeiKeLiMu>(EZombieType.PeiKeLiMu) as T;
+                }
+                
+                
+                
                 objectPool.Register(ret,true);
             }
 

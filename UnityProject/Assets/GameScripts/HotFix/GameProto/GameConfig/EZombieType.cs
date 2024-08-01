@@ -11,7 +11,7 @@
 
 namespace GameConfig
 { 
-    public enum EPrincessType
+    public enum EZombieType
     {
         Null = 0,
         /// <summary>

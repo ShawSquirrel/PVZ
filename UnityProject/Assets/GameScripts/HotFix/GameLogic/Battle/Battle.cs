@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using GameBase;
+using GameConfig;
 using TEngine;
-using UnityEngine;
 
 namespace GameLogic
 {
@@ -12,16 +12,20 @@ namespace GameLogic
     {
         public PlantSystem PlantSystem = new PlantSystem();
         public MapSystem MapSystem = new MapSystem();
+        public ZomBiePlaceSystem ZomBiePlaceSystem = new ZomBiePlaceSystem();
+        public BattleData BattleData;
         
+
         protected override void Init()
         {
             base.Init();
             PlantSystem.Init();
-            
-            
-            GameModule.UI.ShowUI<UI_SelectPrincess>(new List<EPrincessType>() { EPrincessType.CaoYeYouYi , EPrincessType.PeiKeLiMu});
-            MapGenerate();
 
+
+            GameModule.UI.ShowUI<UI_SelectPrincess>(new List<EPrincessType>() { EPrincessType.CaoYeYouYi, EPrincessType.PeiKeLiMu });
+            MapGenerate();
+            
+            ZomBiePlaceSystem.Init().Forget();
         }
 
         private void MapGenerate()

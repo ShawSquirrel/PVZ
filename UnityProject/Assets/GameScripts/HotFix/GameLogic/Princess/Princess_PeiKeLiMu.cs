@@ -1,4 +1,6 @@
-﻿namespace GameLogic
+﻿using GameConfig;
+
+namespace GameLogic
 {
     public class Princess_PeiKeLiMu : APrincess
     {

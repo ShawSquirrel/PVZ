@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8962894273756002664}
   - component: {fileID: 966611292594476176}
-  - component: {fileID: 4395106593984591890}
+  - component: {fileID: -4325101313735326928}
   m_Layer: 0
   m_Name: MapItem
   m_TagString: Untagged
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!65 &4395106593984591890
+--- !u!65 &-4325101313735326928
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -100,7 +100,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

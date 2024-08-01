@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using GameConfig;
 using GameLogic;
 using TEngine;
 using UnityEngine;
@@ -30,6 +31,7 @@ public partial class GameApp
     public void StartGame()
     {
         Battle.Instance.Active();
+        Battle = Battle.Instance;
     }
 
     public void SelectPrincess(EPrincessType princessType)

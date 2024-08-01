@@ -1,4 +1,5 @@
 ﻿using System;
+using GameConfig;
 using TEngine;
 using UnityEngine;
 using Object = UnityEngine.Object;

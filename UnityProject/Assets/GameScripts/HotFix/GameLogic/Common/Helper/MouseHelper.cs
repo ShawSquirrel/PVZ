@@ -5,7 +5,9 @@ namespace GameLogic
 {
     public static class MouseHelper
     {
-        public static Vector3 GetMouseToWorld()
+        public static Vector3 S_LastHitPoint;
+
+        public static Vector3 GetMousePointToWorldPoint()
         {
             Vector3 mouseScreenPosition = Input.mousePosition;
 
@@ -22,12 +24,12 @@ namespace GameLogic
                 Vector3 hitPoint = hit.point;
 
                 // 打印或处理击中位置
-                Log.Debug("Mouse position in 3D world: " + hitPoint);
-
-                return hitPoint;
+                // Log.Debug("Mouse position in 3D world: " + hitPoint);
+                S_LastHitPoint = hitPoint;
             }
-            Log.Warning("Ray cast lost");
-            return Vector3.zero;
+
+            // Log.Warning("Ray cast lost");
+            return S_LastHitPoint;
         }
     }
 }

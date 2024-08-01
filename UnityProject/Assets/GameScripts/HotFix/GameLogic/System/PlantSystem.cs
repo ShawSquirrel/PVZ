@@ -53,7 +53,7 @@ namespace GameLogic
 
         public void Plant(Vector2Int mapItemIndex)
         {
-            MapData mapData = Battle.Instance.MapSystem.MapDataDict[mapItemIndex];
+            MapData mapData = Battle.Instance.MapSystem._MapDataDict[mapItemIndex];
             if (mapData.Princess == null && mapData.MapItem is ICanPlanted canPlanted)
             {
                 mapData.Princess = SelectPrincess;
@@ -70,7 +70,7 @@ namespace GameLogic
         {
             if (SelectPrincess != null)
             {
-                SelectPrincess.TF.position = MouseHelper.GetMouseToWorld();
+                SelectPrincess.TF.position = MouseHelper.GetMousePointToWorldPoint();
             }
         }
     }

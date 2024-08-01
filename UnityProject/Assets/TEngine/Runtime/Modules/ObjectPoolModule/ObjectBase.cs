@@ -79,19 +79,18 @@ namespace TEngine
         /// <summary>
         /// 初始化对象基类。
         /// </summary>
-        /// <param name="name">对象名称。</param>
         /// <param name="target">对象。</param>
-        protected void Initialize(string name, object target)
+        public void Initialize_Out(object target)
         {
-            Initialize(name, target, false, 0);
+            Initialize(null, target, false, 0);
         }
-        
+
         /// <summary>
         /// 初始化对象基类。
         /// </summary>
         /// <param name="name">对象名称。</param>
         /// <param name="target">对象。</param>
-        public void Initialize_Out(string name, object target)
+        protected void Initialize(string name, object target)
         {
             Initialize(name, target, false, 0);
         }

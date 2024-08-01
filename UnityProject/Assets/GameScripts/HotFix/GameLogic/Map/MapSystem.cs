@@ -7,11 +7,18 @@ namespace GameLogic
 {
     public class MapSystem
     {
-        public Dictionary<Vector2Int, MapData> MapDataDict = new Dictionary<Vector2Int, MapData>();
+        public Transform _parent;
+        public Dictionary<Vector2Int, MapData> _MapDataDict = new Dictionary<Vector2Int, MapData>();
 
         public async UniTask MapGenerate(int[,] matrix)
         {
-            Transform parent = new GameObject("MapRoot").transform;
+            if (_parent == null)
+            {
+                _parent = Object.Instantiate(GameModule.Resource.LoadAsset<GameObject>("MapRoot")).transform;
+                _parent.name = "MapRoot";
+            }
+            
+            
             int width = matrix.GetLength(0);
             int height = matrix.GetLength(1);
             for (int i = 0; i < width; i++)
@@ -20,10 +27,10 @@ namespace GameLogic
                 {
                     Vector2Int index = new Vector2Int(i, j);
 
-                    if (MapDataDict.TryGetValue(index, out MapData mapData) == false)
+                    if (_MapDataDict.TryGetValue(index, out MapData mapData) == false)
                     {
                         mapData = new MapData();
-                        MapDataDict.Add(index, mapData);
+                        _MapDataDict.Add(index, mapData);
                     }
 
                     AMapItem mapItem;
@@ -45,7 +52,7 @@ namespace GameLogic
                     
                     mapItem.TF.position = new Vector3(-width / 2f + i, height / 2f - j);
                     mapItem.TF.name = index.ToString();
-                    mapItem.TF.SetParent(parent);
+                    mapItem.TF.SetParent(_parent);
                     mapItem.Obj.AddComponent<MapItemMouseEvent>().MapItemIndex = index;
                 }
             }

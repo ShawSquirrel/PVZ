@@ -11,6 +11,22 @@ namespace GameLogic
 
         protected override void Release(bool isShutdown)
         {
+            if (Obj != null)
+            {
+                Object.Destroy(Obj);
+            }
+        }
+
+        protected override void OnSpawn()
+        {
+            base.OnSpawn();
+            Obj.SetActiveSelf(true);
+        }
+
+        protected override void OnUnspawn()
+        {
+            base.OnUnspawn();
+            Obj.SetActiveSelf(false);
         }
 
         protected override void EndObjectInitialize()
@@ -33,7 +49,7 @@ namespace GameLogic
         {
             T ret = MemoryPool.Acquire<T>();
             GameObject target = Object.Instantiate(GameModule.Resource.LoadAsset<GameObject>("MapItem"));
-            ret.Initialize_Out($"{typeof(T).Name}", target);
+            ret.Initialize_Out(target);
             return ret;
         }
     }

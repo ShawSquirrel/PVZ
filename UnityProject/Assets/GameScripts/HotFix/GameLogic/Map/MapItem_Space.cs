@@ -13,14 +13,6 @@ namespace GameLogic
             base.MapItemInitialize();
             SetColor(Color.yellow);
         }
-
-        public static MapItem_Space CreateInstance()
-        {
-            MapItem_Space ret = MemoryPool.Acquire<MapItem_Space>();
-            GameObject target = Object.Instantiate(GameModule.Resource.LoadAsset<GameObject>("MapItem"));
-            ret.Initialize($"{nameof(MapItem_Space)}", target);
-            return ret;
-        }
     }
     
 }

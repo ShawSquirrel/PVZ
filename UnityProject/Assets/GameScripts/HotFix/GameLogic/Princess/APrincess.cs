@@ -1,12 +1,14 @@
-﻿using TEngine;
+﻿using GameConfig;
+using TEngine;
 using UnityEngine;
 
 namespace GameLogic
 {
-    public class APrincess : ObjectBase, IPrincess, IUnit, IPlant
+    public class APrincess : ObjectBase, IPrincess, IUnit, IPlant, IAnim
     {
         public GameObject _Obj { get; set; }
         public Transform _TF { get; set; }
+        public IAnimComponent Anim { get; set; }
 
         public virtual EPrincessType PrincessType { get; }
 
@@ -22,6 +24,7 @@ namespace GameLogic
         {
             base.OnSpawn();
             _Obj.SetActiveSelf(true);
+            Anim.Play(EAnimState.Idle);
         }
 
         protected override void OnUnSpawn()
@@ -34,6 +37,7 @@ namespace GameLogic
         {
             _Obj = Target as GameObject;
             _TF = _Obj.transform;
+            Anim = _TF.Find("Body").GetComponent<IAnimComponent>();
         }
 
         public static T CreateInstance<T>(EPrincessType princessType) where T : ObjectBase, new()

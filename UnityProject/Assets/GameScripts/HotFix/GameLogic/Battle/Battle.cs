@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using GameBase;
 using GameConfig;
 using TEngine;
+using UnityEngine;
 
 namespace GameLogic
 {
@@ -41,13 +42,23 @@ namespace GameLogic
         private void MapGenerate()
         {
             int[,] arr = new int[9, 6];
-            for (int i = 0; i < arr.GetLength(0); i++)
+
+            
+            TextAsset textAsset = GameModule.Resource.LoadAsset<TextAsset>("Map6x9");
+            string mapStr = textAsset.text;
+            string[] mapStrArr = mapStr.Trim('\n').Split('\n');
+            int length = mapStrArr[0].Trim(',').Split(',').Length;
+            int hieght = mapStrArr.Length; 
+
+            for (int i = 0; i < hieght; i++)
             {
-                for (int j = 0; j < arr.GetLength(1); j++)
+                for (int ii = 0; ii < length; ii++)
                 {
-                    arr[i, j] = j % 2 == 0 ? 0 : 1;
+                    string[] rowArr = mapStrArr[i].Trim(',').Split(',');
+                    arr[ii, i] = int.Parse(rowArr[ii]);
                 }
             }
+            
 
             MapSystem.MapGenerate(arr).Forget();
         }

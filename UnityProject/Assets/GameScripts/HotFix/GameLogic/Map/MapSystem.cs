@@ -8,17 +8,19 @@ namespace GameLogic
     public class MapSystem
     {
         public Transform _parent;
-        public Dictionary<Vector2Int, MapData> _MapDataDict = new Dictionary<Vector2Int, MapData>();
+        public Dictionary<Vector2Int, MapData> _mapDataDict = new Dictionary<Vector2Int, MapData>();
 
         public async UniTask MapGenerate(int[,] matrix)
         {
             if (_parent == null)
             {
-                _parent = Object.Instantiate(GameModule.Resource.LoadAsset<GameObject>("MapRoot")).transform;
-                _parent.name = "MapRoot";
+                _parent      = Object.Instantiate(GameModule.Resource.LoadAsset<GameObject>("Map 1")).transform;
+                _parent.name = "Map";
+
+                _parent = _parent.Find("MapRoot");
             }
-            
-            
+
+
             int width = matrix.GetLength(0);
             int height = matrix.GetLength(1);
             for (int i = 0; i < width; i++)
@@ -27,10 +29,10 @@ namespace GameLogic
                 {
                     Vector2Int index = new Vector2Int(i, j);
 
-                    if (_MapDataDict.TryGetValue(index, out MapData mapData) == false)
+                    if (_mapDataDict.TryGetValue(index, out MapData mapData) == false)
                     {
                         mapData = new MapData();
-                        _MapDataDict.Add(index, mapData);
+                        _mapDataDict.Add(index, mapData);
                     }
 
                     AMapItem mapItem;
@@ -49,10 +51,9 @@ namespace GameLogic
                     }
 
                     mapData._MapItem = mapItem;
-                    
-                    mapItem._TF.position = new Vector3(-width / 2f + i, height / 2f - j);
-                    mapItem._TF.name = index.ToString();
-                    mapItem._TF.SetParent(_parent);
+                    mapItem._TF.SetParent(_parent, false);
+                    mapItem._TF.localPosition                                   = new Vector3(i, -j);
+                    mapItem._TF.name                                            = index.ToString();
                     mapItem._Obj.AddComponent<MapItemMouseEvent>().MapItemIndex = index;
                 }
             }

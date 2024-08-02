@@ -50,7 +50,7 @@ namespace GameLogic
 
         public void Plant(Vector2Int mapItemIndex)
         {
-            MapData mapData = Battle.Instance.MapSystem._MapDataDict[mapItemIndex];
+            MapData mapData = Battle.Instance.MapSystem._mapDataDict[mapItemIndex];
             AMapItem mapItem = mapData._MapItem;
 
             if (mapData._Princess != null) return;

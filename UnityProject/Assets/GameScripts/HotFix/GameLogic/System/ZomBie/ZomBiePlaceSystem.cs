@@ -17,7 +17,7 @@ namespace GameLogic
         public void PlaceZomBie(EZombieType zombieType, Vector2Int index)
         {
             AZonBie zonBie = PoolHelper.Spawn<ZomBie_PeiKeLiMu>();
-            zonBie._TF.position = GameApp.Instance.Battle.MapSystem._MapDataDict[index]._MapItem._TF.position;
+            zonBie._TF.position = GameApp.Instance.Battle.MapSystem._mapDataDict[index]._MapItem._TF.position;
         }
     }
 }

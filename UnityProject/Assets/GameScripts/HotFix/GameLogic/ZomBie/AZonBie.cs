@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GameLogic
 {
-    public class AZonBie : ObjectBase, IEntity, IZomBie, IUnit, IAnim, IMove, ITrigger, IAttribute
+    public class AZonBie : ObjectBase, IEntity, IZomBie, IUnit, IAnim, IMove, ITrigger, IAttribute, IDie
     {
         public GameObject _Obj { get; set; }
         public Transform _TF { get; set; }
@@ -64,6 +64,12 @@ namespace GameLogic
                     AttributeDict.AddValue(EAttributeType.HitPoint, -atk);
                     
                     Log.Debug($"被伤害 :: {skill._TF.name}  下降 :: {atk}  剩余 :: {AttributeDict.GetValue(EAttributeType.HitPoint)}");
+
+
+                    if (AttributeDict.GetValue(EAttributeType.HitPoint) <= 0)
+                    {
+                        Die();
+                    }
                 }
             }
         }
@@ -84,5 +90,8 @@ namespace GameLogic
             return ret;
         }
 
+        public virtual void Die()
+        {
+        }
     }
 }

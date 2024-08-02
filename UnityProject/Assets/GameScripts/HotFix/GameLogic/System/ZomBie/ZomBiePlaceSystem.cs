@@ -21,10 +21,6 @@ namespace GameLogic
             await UniTask.CompletedTask;
         }
         
-        
-        
-        
-        
         public void PlaceZomBie(EZombieType zombieType, Vector3 pos)
         {
             AZonBie zonBie = PoolHelper.Spawn<ZomBie_PeiKeLiMu>();

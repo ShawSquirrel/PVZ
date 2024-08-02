@@ -17,9 +17,9 @@ namespace GameLogic
         {
             fsm.Owner._Anim.Play(EAnimState.Attack, false, () => ChangeState<Idle_Princess>(fsm));
             await UniTask.Delay(300);
-            GameObject bullet = Object.Instantiate(GameModule.Resource.LoadAsset<GameObject>("CaoYeYouYi_Bullet"));
-            bullet.transform.position                 = fsm.Owner._TF.Find("AttackPoint").position;
-            bullet.GetComponent<Rigidbody>().velocity = Vector3.right;
+            Bullet bullet = PoolHelper.Spawn<Bullet>();
+            bullet._TF.position                 = fsm.Owner._TF.Find("AttackPoint").position;
+            bullet._Rigid.velocity = Vector3.right * 3;
         }
     }
 }

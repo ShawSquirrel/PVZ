@@ -5,12 +5,14 @@ using UnityEngine;
 
 namespace GameLogic
 {
-    public class APrincess : ObjectBase, IPrincess, IUnit, IPlant, IAnim, IPrincessFSM<APrincess>
+    public class APrincess : ObjectBase, IPrincess, IUnit, IPlant, IAnim, IPrincessFSM<APrincess>, IAttribute
     {
         public GameObject _Obj { get; set; }
         public Transform _TF { get; set; }
         public IAnimComponent _Anim { get; set; }
         public IFsm<APrincess> FSM { get; set; }
+        public AttributeDictionary AttributeDict { get; set; } = new AttributeDictionary();
+
         public virtual EPrincessType PrincessType { get; }
 
         protected override void Release(bool isShutdown)

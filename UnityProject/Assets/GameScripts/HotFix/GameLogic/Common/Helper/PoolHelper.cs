@@ -49,6 +49,11 @@ namespace GameLogic
                     ret = AZonBie.CreateInstance<ZomBie_PeiKeLiMu>(EZombieType.PeiKeLiMu) as T;
                 }
 
+                else if (type == typeof(Bullet))
+                {
+                    ret = Bullet.CreateInstance() as T;
+                }
+
                 
                 
                 

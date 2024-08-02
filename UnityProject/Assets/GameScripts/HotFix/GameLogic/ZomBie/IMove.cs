@@ -4,6 +4,6 @@ namespace GameLogic
 {
     public interface IMove
     {
-        public Rigidbody2D _Rigid2D { get; set; }
+        public Rigidbody _Rigid { get; set; }
     }
 }

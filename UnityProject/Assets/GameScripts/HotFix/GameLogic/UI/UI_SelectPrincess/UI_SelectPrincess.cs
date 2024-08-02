@@ -57,6 +57,7 @@ namespace GameLogic
             SelectedPrincessCardPool = GameModule.ObjectPool.CreateSingleSpawnObjectPool<UI_SelectedPrincessCard>();
             
             AddUIEvent(UIEvent.UpdateSelectedPrincess, OnUpdateSelectedPrincess);
+            AddUIEvent(UIEvent.ResetSelectPrincess, () => Root_SelectBar.GetComponent<ToggleGroup>().SetAllTogglesOff());
 
 
             var princessDict = Battle.Instance.SelectPrincessSystem.ToBeSelectedPrincessDict;

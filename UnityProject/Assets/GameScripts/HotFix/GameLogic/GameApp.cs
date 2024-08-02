@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Cysharp.Threading.Tasks;
 using GameBase;
+using GameLogic;
 using TEngine;
 
 /// <summary>
@@ -41,6 +42,7 @@ public partial class GameApp : Singleton<GameApp>
     private void StartGameLogic()
     {
         StartMain().Forget();
+        
     }
 
     /// <summary>

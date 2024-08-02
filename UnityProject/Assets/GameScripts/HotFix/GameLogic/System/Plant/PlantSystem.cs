@@ -11,7 +11,7 @@ namespace GameLogic
         public bool CanPlant => SelectedPrincessType.Value != EPrincessType.Null;
 
         public BindValue<EPrincessType> SelectedPrincessType = new BindValue<EPrincessType>();
-        private APrincess _SelectPrincess;
+        private AActor _selectActor;
 
         public void Init()
         {
@@ -22,28 +22,28 @@ namespace GameLogic
 
         private void OnSelectedPrincessTypeChanged(EPrincessType lastPrincessType, EPrincessType currentPrincessType)
         {
-            if (_SelectPrincess != null)
+            if (_selectActor != null)
             {
                 switch (lastPrincessType)
                 {
                     case EPrincessType.CaoYeYouYi:
-                        PoolHelper.UnSpawn(_SelectPrincess as Princess_CaoYeYouYi);
+                        PoolHelper.UnSpawn(_selectActor as ActorCaoYeYouYi);
                         break;
                     case EPrincessType.PeiKeLiMu:
-                        PoolHelper.UnSpawn(_SelectPrincess as Princess_PeiKeLiMu);
+                        PoolHelper.UnSpawn(_selectActor as ActorPeiKeLiMu);
                         break;
                 }
             }
 
-            _SelectPrincess = null;
+            _selectActor = null;
             
             switch (currentPrincessType)
             {
                 case EPrincessType.CaoYeYouYi:
-                    _SelectPrincess = PoolHelper.Spawn<Princess_CaoYeYouYi>();
+                    _selectActor = PoolHelper.Spawn<ActorCaoYeYouYi>();
                     break;
                 case EPrincessType.PeiKeLiMu:
-                    _SelectPrincess = PoolHelper.Spawn<Princess_PeiKeLiMu>();
+                    _selectActor = PoolHelper.Spawn<ActorPeiKeLiMu>();
                     break;
             }
         }
@@ -53,22 +53,22 @@ namespace GameLogic
             MapData mapData = Battle.Instance.MapSystem._mapDataDict[mapItemIndex];
             AMapItem mapItem = mapData._MapItem;
 
-            if (mapData._Princess != null) return;
+            if (mapData._Actor != null) return;
             if (mapItem.Planted() == false) return;
-            if (_SelectPrincess.Plant(mapItem))
+            if (_selectActor.Plant(mapItem))
             {
-                mapData._Princess = _SelectPrincess;
-                Log.Info($"{mapData._Princess._TF.name} Plant to {mapData._MapItem._TF.name}");
-                _SelectPrincess = null;
+                mapData._Actor = _selectActor;
+                Log.Info($"{mapData._Actor._TF.name} Plant to {mapData._MapItem._TF.name}");
+                _selectActor = null;
                 GameEvent.Send(UIEvent.ResetSelectPrincess);
             }
         }
 
         private void OnUpdate()
         {
-            if (_SelectPrincess != null)
+            if (_selectActor != null)
             {
-                _SelectPrincess._TF.position = MouseHelper.GetMousePointToWorldPoint();
+                _selectActor._TF.position = MouseHelper.GetMousePointToWorldPoint();
             }
         }
     }

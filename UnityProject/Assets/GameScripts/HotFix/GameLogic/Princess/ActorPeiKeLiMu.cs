@@ -2,7 +2,7 @@
 
 namespace GameLogic
 {
-    public class Princess_PeiKeLiMu : APrincess
+    public class ActorPeiKeLiMu : AActor
     {
         public override EPrincessType PrincessType => EPrincessType.PeiKeLiMu;
     }

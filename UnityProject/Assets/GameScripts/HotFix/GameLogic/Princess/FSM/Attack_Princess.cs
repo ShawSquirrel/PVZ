@@ -5,15 +5,15 @@ using UnityEngine;
 
 namespace GameLogic
 {
-    public class Attack_Princess : FsmState<APrincess>
+    public class Attack_Princess : FsmState<AActor>
     {
-        protected override void OnEnter(IFsm<APrincess> fsm)
+        protected override void OnEnter(IFsm<AActor> fsm)
         {
             base.OnEnter(fsm);
             Attack(fsm).Forget();
         }
 
-        public async UniTask Attack(IFsm<APrincess> fsm)
+        public async UniTask Attack(IFsm<AActor> fsm)
         {
             fsm.Owner._Anim.Play(EAnimState.Attack, false, () => ChangeState<Idle_Princess>(fsm));
             await UniTask.Delay(300);

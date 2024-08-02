@@ -11,7 +11,7 @@ namespace GameLogic
         {
             base.EndObjectInitialize();
             
-            AttributeDict.SetValue(EAttributeType.Attack, 40);
+            _AttributeDict.SetValue(EAttributeType.Attack, 40);
             
             _Trigger3DEvent                      =  _TF.Find("Body").gameObject.AddComponent<Trigger3DEvent>();
             _Trigger3DEvent._Entity              =  this;

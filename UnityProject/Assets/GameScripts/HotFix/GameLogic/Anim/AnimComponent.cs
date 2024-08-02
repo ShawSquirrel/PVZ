@@ -38,6 +38,7 @@ namespace GameLogic
 
         private void OnComplete(TrackEntry trackentry)
         {
+            _AnimState = (EAnimState)999;
             _Event.OnComplete?.Invoke();
             _Event.Reset();
         }

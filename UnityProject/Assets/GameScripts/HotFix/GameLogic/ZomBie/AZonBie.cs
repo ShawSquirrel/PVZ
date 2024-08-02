@@ -1,17 +1,20 @@
-﻿using GameConfig;
+﻿using System.Collections.Generic;
+using GameConfig;
 using TEngine;
 using UnityEngine;
 
 namespace GameLogic
 {
-    public class AZonBie : ObjectBase, IEntity, IZomBie, IUnit, IAnim, IMove, ITrigger, IAttribute, IDie
+    public class AZonBie : ObjectBase, IEntity, IZomBie, IUnit, IAnim, IMove, ITrigger, IAttribute, IDie, IActorFSM<AZonBie>, IAttack
     {
         public GameObject _Obj { get; set; }
         public Transform _TF { get; set; }
         public IAnimComponent _Anim { get; set; }
         public Rigidbody _Rigid { get; set; }
         public Trigger3DEvent _Trigger3DEvent { get; set; }
-        public AttributeDictionary AttributeDict { get; set; } = new AttributeDictionary();
+        public AttributeDictionary _AttributeDict { get; set; } = new AttributeDictionary();
+        public IFsm<AZonBie> _FSM { get; set; }
+        public bool _IsDie { get; set; } = false;
 
 
         protected override void Release(bool isShutdown)
@@ -26,7 +29,6 @@ namespace GameLogic
         {
             base.OnSpawn();
             _Obj.SetActiveSelf(true);
-            _Anim.Play(EAnimState.Walk);
         }
 
         protected override void OnUnSpawn()
@@ -37,12 +39,20 @@ namespace GameLogic
 
         protected override void EndObjectInitialize()
         {
-            _Obj            = Target as GameObject;
-            _TF             = _Obj.transform;
-            _Anim           = _TF.Find("Body").GetComponent<IAnimComponent>();
-            _Rigid          = _Obj.GetComponent<Rigidbody>();
-            _Rigid.velocity = new Vector2(-0.5f, 0);
-
+            _Obj                                 =  Target as GameObject;
+            _TF                                  =  _Obj.transform;
+            _Anim                                =  _TF.Find("Body").GetComponent<IAnimComponent>();
+            _Rigid                               =  _Obj.GetComponent<Rigidbody>();
+            
+            _FSM = GameModule.Fsm.CreateFsm(this, new List<FsmState<AZonBie>>()
+                                                 {
+                                                    new Attack_ZonBie(),
+                                                    new Idle_ZonBie(),
+                                                    new Walk_ZonBie(),
+                                                    new Die_ZonBie()
+                                                 });
+            _FSM.Start<Walk_ZonBie>();
+            
             _Trigger3DEvent                      =  _TF.Find("Body").gameObject.AddComponent<Trigger3DEvent>();
             _Trigger3DEvent._Entity              =  this;
             _Trigger3DEvent.TriggerStay3DAction  += OnTriggerStay3DAction;
@@ -59,16 +69,16 @@ namespace GameLogic
             {
                 if (skill is IAttribute attribute)
                 {
-                    float atk = attribute.AttributeDict.GetValue(EAttributeType.Attack);
+                    float atk = attribute._AttributeDict.GetValue(EAttributeType.Attack);
                     
-                    AttributeDict.AddValue(EAttributeType.HitPoint, -atk);
+                    _AttributeDict.AddValue(EAttributeType.HitPoint, -atk);
                     
-                    Log.Debug($"被伤害 :: {skill._TF.name}  下降 :: {atk}  剩余 :: {AttributeDict.GetValue(EAttributeType.HitPoint)}");
+                    Log.Debug($"被伤害 :: {skill._TF.name}  下降 :: {atk}  剩余 :: {_AttributeDict.GetValue(EAttributeType.HitPoint)}");
 
 
-                    if (AttributeDict.GetValue(EAttributeType.HitPoint) <= 0)
+                    if (_AttributeDict.GetValue(EAttributeType.HitPoint) <= 0)
                     {
-                        Die();
+                        _IsDie = true;
                     }
                 }
             }
@@ -90,8 +100,14 @@ namespace GameLogic
             return ret;
         }
 
+
         public virtual void Die()
         {
+        }
+
+        public virtual bool AttackCheck()
+        {
+            return false;
         }
     }
 }

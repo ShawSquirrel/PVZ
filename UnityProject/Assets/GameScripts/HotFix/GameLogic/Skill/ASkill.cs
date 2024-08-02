@@ -9,7 +9,7 @@ namespace GameLogic
 
         public GameObject _Obj { get; set; }
         public Transform _TF { get; set; }
-        public AttributeDictionary AttributeDict { get; set; } = new AttributeDictionary();
+        public AttributeDictionary _AttributeDict { get; set; } = new AttributeDictionary();
 
         protected override void EndObjectInitialize()
         {

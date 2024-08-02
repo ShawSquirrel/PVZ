@@ -8,6 +8,6 @@ namespace GameLogic
 
     public interface IAttribute
     {
-        public AttributeDictionary AttributeDict { get; set; }
+        public AttributeDictionary _AttributeDict { get; set; }
     }
 }

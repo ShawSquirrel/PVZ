@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace GameLogic
 {
-    public class APrincess : ObjectBase, IPrincess, IUnit, IPlant, IAnim, IPrincessFSM<APrincess>, IAttribute
+    public class AActor : ObjectBase, IPrincess, IUnit, IPlant, IAnim, IActorFSM<AActor>, IAttribute
     {
         public GameObject _Obj { get; set; }
         public Transform _TF { get; set; }
         public IAnimComponent _Anim { get; set; }
-        public IFsm<APrincess> FSM { get; set; }
-        public AttributeDictionary AttributeDict { get; set; } = new AttributeDictionary();
+        public IFsm<AActor> _FSM { get; set; }
+        public AttributeDictionary _AttributeDict { get; set; } = new AttributeDictionary();
 
         public virtual EPrincessType PrincessType { get; }
 
@@ -40,13 +40,13 @@ namespace GameLogic
             _Obj  = Target as GameObject;
             _TF   = _Obj.transform;
             _Anim = _TF.Find("Body").GetComponent<IAnimComponent>();
-            FSM = GameModule.Fsm.CreateFsm($"{PrincessType.ToString()} {GetHashCode()}", this, new List<FsmState<APrincess>>()
+            _FSM = GameModule.Fsm.CreateFsm($"{PrincessType.ToString()} {GetHashCode()}", this, new List<FsmState<AActor>>()
                                                                                {
                                                                                    new Attack_Princess(),
                                                                                    new Idle_Princess()
                                                                                });
 
-            FSM.Start<Idle_Princess>();
+            _FSM.Start<Idle_Princess>();
         }
 
         public static T CreateInstance<T>(EPrincessType princessType) where T : ObjectBase, new()

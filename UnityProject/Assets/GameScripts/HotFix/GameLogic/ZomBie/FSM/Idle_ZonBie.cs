@@ -4,9 +4,9 @@ using TEngine;
 
 namespace GameLogic
 {
-    public class Idle_Princess : FsmState<AActor>
+    public class Idle_ZonBie : FsmState<AZonBie>
     {
-        protected override void OnEnter(IFsm<AActor> fsm)
+        protected override void OnEnter(IFsm<AZonBie> fsm)
         {
             base.OnEnter(fsm);
             fsm.Owner._Anim.Play(EAnimState.Idle);
@@ -14,10 +14,10 @@ namespace GameLogic
             Change(fsm).Forget();
         }
 
-        public async UniTask Change(IFsm<AActor> fsm)
+        public async UniTask Change(IFsm<AZonBie> fsm)
         {
             await UniTask.Delay(3000);
-            ChangeState<Attack_Princess>(fsm);
+            ChangeState<Attack_ZonBie>(fsm);
         }
     }
 }

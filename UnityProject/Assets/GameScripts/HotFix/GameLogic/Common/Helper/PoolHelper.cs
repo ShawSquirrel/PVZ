@@ -30,13 +30,13 @@ namespace GameLogic
                 
                 
                 
-                else if (type == typeof(Princess_CaoYeYouYi))
+                else if (type == typeof(ActorCaoYeYouYi))
                 {
-                    ret = APrincess.CreateInstance<Princess_CaoYeYouYi>(EPrincessType.CaoYeYouYi) as T;
+                    ret = AActor.CreateInstance<ActorCaoYeYouYi>(EPrincessType.CaoYeYouYi) as T;
                 }
-                else if (type == typeof(Princess_PeiKeLiMu))
+                else if (type == typeof(ActorPeiKeLiMu))
                 {
-                    ret = APrincess.CreateInstance<Princess_PeiKeLiMu>(EPrincessType.PeiKeLiMu) as T;
+                    ret = AActor.CreateInstance<ActorPeiKeLiMu>(EPrincessType.PeiKeLiMu) as T;
                 }
                 
                 

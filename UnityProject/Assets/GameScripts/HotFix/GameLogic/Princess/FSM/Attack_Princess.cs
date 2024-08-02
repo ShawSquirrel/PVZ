@@ -1,6 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using GameConfig;
 using TEngine;
+using UnityEngine;
 
 namespace GameLogic
 {
@@ -9,14 +10,16 @@ namespace GameLogic
         protected override void OnEnter(IFsm<APrincess> fsm)
         {
             base.OnEnter(fsm);
-            fsm.Owner._Anim.Play(EAnimState.Attack);
-            Change(fsm).Forget();
+            Attack(fsm).Forget();
         }
 
-        public async UniTask Change(IFsm<APrincess> fsm)
+        public async UniTask Attack(IFsm<APrincess> fsm)
         {
-            await UniTask.Delay(3000);
-            ChangeState<Idle_Princess>(fsm);
+            fsm.Owner._Anim.Play(EAnimState.Attack, false, () => ChangeState<Idle_Princess>(fsm));
+            await UniTask.Delay(300);
+            GameObject bullet = Object.Instantiate(GameModule.Resource.LoadAsset<GameObject>("CaoYeYouYi_Bullet"));
+            bullet.transform.position                 = fsm.Owner._TF.Find("AttackPoint").position;
+            bullet.GetComponent<Rigidbody>().velocity = Vector3.right;
         }
     }
 }

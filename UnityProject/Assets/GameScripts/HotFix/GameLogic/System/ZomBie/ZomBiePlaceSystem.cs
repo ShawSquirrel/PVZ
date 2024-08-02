@@ -1,23 +1,34 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using GameConfig;
+using TEngine;
 using UnityEngine;
 
 namespace GameLogic
 {
     public class ZomBiePlaceSystem : IZomBiePlaceSystem
     {
+        public Dictionary<int, Vector3> strikePointDict = new Dictionary<int, Vector3>();
         public async UniTask Init()
         {
-            await UniTask.Delay(3000);
-            PlaceZomBie(EZombieType.PeiKeLiMu, new Vector2Int(8,5));
+            for (int i = 0; i < 6; i++)
+            {
+                strikePointDict.Add(i, new Vector3(10, -i));
+            }
+
+            await UniTask.Delay(2000);
+            PlaceZomBie(EZombieType.PeiKeLiMu, strikePointDict[2]);
             await UniTask.CompletedTask;
         }
         
         
-        public void PlaceZomBie(EZombieType zombieType, Vector2Int index)
+        
+        
+        
+        public void PlaceZomBie(EZombieType zombieType, Vector3 pos)
         {
             AZonBie zonBie = PoolHelper.Spawn<ZomBie_PeiKeLiMu>();
-            zonBie._TF.position = GameApp.Instance.Battle.MapSystem._mapDataDict[index]._MapItem._TF.position;
+            zonBie._TF.position = pos;
         }
     }
 }

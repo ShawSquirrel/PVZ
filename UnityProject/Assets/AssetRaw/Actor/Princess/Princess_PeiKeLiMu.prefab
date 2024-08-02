@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6700774928120050404}
   - component: {fileID: 1743667665571687807}
   - component: {fileID: 7007978089125817354}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82,8 +82,8 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 457443621
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &6700774928120050404
@@ -163,7 +163,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2212044182513505288}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Princess_PeiKeLiMu
   m_TagString: Untagged
   m_Icon: {fileID: 0}

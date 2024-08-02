@@ -14,7 +14,7 @@ namespace GameLogic
         {
             if (_parent == null)
             {
-                _parent      = Object.Instantiate(GameModule.Resource.LoadAsset<GameObject>("Map 1")).transform;
+                _parent      = Object.Instantiate(GameModule.Resource.LoadAsset<GameObject>("Map")).transform;
                 _parent.name = "Map";
 
                 _parent = _parent.Find("MapRoot");

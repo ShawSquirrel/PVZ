@@ -7,19 +7,29 @@ using TEngine;
 
 namespace GameLogic
 {
+
+    public enum EBattleType
+    {
+        SelectPrincessCard,
+        Battle
+    }
+    
     [Serializable]
     public class Battle : Singleton<Battle>
     {
         public PlantSystem PlantSystem = new PlantSystem();
         public MapSystem MapSystem = new MapSystem();
         public ZomBiePlaceSystem ZomBiePlaceSystem = new ZomBiePlaceSystem();
+        public SelectPrincessSystem SelectPrincessSystem = new SelectPrincessSystem();
         public BattleData BattleData;
+        public EBattleType BattleType;
         
 
         protected override void Init()
         {
             base.Init();
             PlantSystem.Init();
+            SelectPrincessSystem.Init();
 
 
             GameModule.UI.ShowUI<UI_SelectPrincess>(new List<EPrincessType>() { EPrincessType.CaoYeYouYi, EPrincessType.PeiKeLiMu });

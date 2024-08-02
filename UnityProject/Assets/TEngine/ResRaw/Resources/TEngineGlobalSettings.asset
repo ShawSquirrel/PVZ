@@ -82,6 +82,10 @@ MonoBehaviour:
       componentName: Dropdown
     - uiElementRegex: Toggle_
       componentName: Toggle
+    - uiElementRegex: Root_
+      componentName: Transform
+    - uiElementRegex: Item_
+      componentName: GameObject
   m_HybridCLRCustomGlobalSettings:
     HotUpdateAssemblies:
     - GameBase.dll

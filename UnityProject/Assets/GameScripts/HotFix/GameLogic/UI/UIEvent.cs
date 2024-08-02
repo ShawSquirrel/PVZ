@@ -4,5 +4,6 @@
     {
         public static readonly int Start = "Start".GetHashCode();
         public static readonly int ResetSelectPrincess = "ResetSelectPrincess".GetHashCode();
+        public static readonly int UpdateSelectedPrincess = "UpdateSelectedPrincess".GetHashCode();
     }
 }

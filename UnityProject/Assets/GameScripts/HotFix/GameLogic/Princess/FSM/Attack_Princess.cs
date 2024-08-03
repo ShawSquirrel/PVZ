@@ -5,21 +5,42 @@ using UnityEngine;
 
 namespace GameLogic
 {
-    public class Attack_Princess : FsmState<AActor>
+    public class Attack_Princess : FsmState<APrincess>
     {
-        protected override void OnEnter(IFsm<AActor> fsm)
+        private bool isAttackComplete;
+        protected override void OnEnter(IFsm<APrincess> fsm)
         {
             base.OnEnter(fsm);
-            Attack(fsm).Forget();
+            isAttackComplete = true;
         }
 
-        public async UniTask Attack(IFsm<AActor> fsm)
+        public async UniTask Attack(IFsm<APrincess> fsm)
         {
-            fsm.Owner._Anim.Play(EAnimState.Attack, false, () => ChangeState<Idle_Princess>(fsm));
-            await UniTask.Delay(300);
-            Bullet bullet = PoolHelper.Spawn<Bullet>();
-            bullet._TF.position                 = fsm.Owner._TF.Find("AttackPoint").position;
-            bullet._Rigid.velocity = Vector3.right * 3;
+            isAttackComplete = false;
+            fsm.Owner._Anim.Play(EAnimState.Attack, false, () => isAttackComplete = true);
+            await fsm.Owner.Attack();
+        }
+        
+        
+        protected override void OnUpdate(IFsm<APrincess> fsm, float elapseSeconds, float realElapseSeconds)
+        {
+            base.OnUpdate(fsm, elapseSeconds, realElapseSeconds);
+            if (fsm.Owner._IsDie == true)
+            {   
+                ChangeState<Die_Princess>(fsm);
+                return;
+            }
+
+            if (isAttackComplete == false) return;
+
+            if (fsm.Owner.AttackCheck())
+            {
+                Attack(fsm).Forget();
+            }
+            else
+            {
+                ChangeState<Idle_Princess>(fsm);
+            }
         }
     }
 }

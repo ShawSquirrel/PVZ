@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using GameConfig;
 using TEngine;
 using UnityEngine;
@@ -108,6 +109,11 @@ namespace GameLogic
         public virtual bool AttackCheck()
         {
             return false;
+        }
+
+        public async UniTask Attack()
+        {
+            await UniTask.CompletedTask;
         }
     }
 }

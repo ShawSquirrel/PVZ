@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using GameConfig;
 using TEngine;
 using UnityEngine;
 
 namespace GameLogic
 {
-    public class AActor : ObjectBase, IPrincess, IUnit, IPlant, IAnim, IActorFSM<AActor>, IAttribute
+    public class APrincess : ObjectBase, IPrincess, IUnit, IPlant, IAnim, IActorFSM<APrincess>, IAttribute, IAttack, IDie
     {
         public GameObject _Obj { get; set; }
         public Transform _TF { get; set; }
         public IAnimComponent _Anim { get; set; }
-        public IFsm<AActor> _FSM { get; set; }
+        public IFsm<APrincess> _FSM { get; set; }
         public AttributeDictionary _AttributeDict { get; set; } = new AttributeDictionary();
 
         public virtual EPrincessType PrincessType { get; }
@@ -40,13 +41,12 @@ namespace GameLogic
             _Obj  = Target as GameObject;
             _TF   = _Obj.transform;
             _Anim = _TF.Find("Body").GetComponent<IAnimComponent>();
-            _FSM = GameModule.Fsm.CreateFsm($"{PrincessType.ToString()} {GetHashCode()}", this, new List<FsmState<AActor>>()
+            _Anim.Pause();
+            _FSM = GameModule.Fsm.CreateFsm($"{PrincessType.ToString()} {GetHashCode()}", this, new List<FsmState<APrincess>>()
                                                                                {
                                                                                    new Attack_Princess(),
                                                                                    new Idle_Princess()
                                                                                });
-
-            _FSM.Start<Idle_Princess>();
         }
 
         public static T CreateInstance<T>(EPrincessType princessType) where T : ObjectBase, new()
@@ -57,15 +57,30 @@ namespace GameLogic
             return ret;
         }
 
-        public virtual bool Plant(AMapItem mapItem)
+        public virtual bool Plant(MapData mapData)
         {
             return false;
         }
 
-        protected bool CanPlant(AMapItem mapItem)
+        public virtual void PlantCallBack(MapData mapData)
         {
-            _TF.transform.position = mapItem._TF.position;
-            return true;
+            _FSM.Start<Idle_Princess>();
+            _TF.transform.position = mapData._MapItem._TF.position;
+        }
+
+        public virtual bool AttackCheck()
+        {
+            return false;
+        }
+
+        public virtual async UniTask Attack()
+        {
+            
+        }
+
+        public bool _IsDie { get; set; }
+        public virtual void Die()
+        {
         }
     }
 }

@@ -114,7 +114,7 @@ MonoBehaviour:
   calculateTangents: 0
   logErrors: 0
   disableRenderingOnOverride: 1
-  _animationName: 
+  _animationName: 05_idle
   loop: 0
   timeScale: 1
 --- !u!114 &1743667665571687807
@@ -152,8 +152,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.8124413, y: 5.621062, z: 0}
-  m_Center: {x: -0.1375778, y: 1.6775692, z: 0}
+  m_Size: {x: 2.9769466, y: 4.853372, z: 0}
+  m_Center: {x: -0.0004900992, y: 2.061415, z: 0}
 --- !u!1 &5209179877376175106
 GameObject:
   m_ObjectHideFlags: 0

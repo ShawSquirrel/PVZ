@@ -6,6 +6,6 @@ namespace GameLogic
     {
         public Vector2Int _Index;
         public AMapItem _MapItem;
-        public AActor _Actor;
+        public APrincess _Princess;
     }
 }

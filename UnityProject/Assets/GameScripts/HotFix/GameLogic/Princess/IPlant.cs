@@ -2,6 +2,7 @@
 {
     public interface IPlant
     {
-        public bool Plant(AMapItem mapItem);
+        public bool Plant(MapData mapItem);
+        public void PlantCallBack(MapData mapItem);
     }
 }

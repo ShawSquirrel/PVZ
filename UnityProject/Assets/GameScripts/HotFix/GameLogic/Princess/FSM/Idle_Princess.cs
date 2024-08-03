@@ -4,20 +4,21 @@ using TEngine;
 
 namespace GameLogic
 {
-    public class Idle_Princess : FsmState<AActor>
+    public class Idle_Princess : FsmState<APrincess>
     {
-        protected override void OnEnter(IFsm<AActor> fsm)
+        protected override void OnEnter(IFsm<APrincess> fsm)
         {
             base.OnEnter(fsm);
             fsm.Owner._Anim.Play(EAnimState.Idle);
-
-            Change(fsm).Forget();
         }
 
-        public async UniTask Change(IFsm<AActor> fsm)
+        protected override void OnUpdate(IFsm<APrincess> fsm, float elapseSeconds, float realElapseSeconds)
         {
-            await UniTask.Delay(3000);
-            ChangeState<Attack_Princess>(fsm);
+            base.OnUpdate(fsm, elapseSeconds, realElapseSeconds);
+            if (fsm.Owner.AttackCheck())
+            {
+                ChangeState<Attack_Princess>(fsm);
+            }
         }
     }
 }

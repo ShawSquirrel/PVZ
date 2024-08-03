@@ -41,11 +41,13 @@ namespace GameLogic
             _AnimState = (EAnimState)999;
             _Event.OnComplete?.Invoke();
             _Event.Reset();
+            
         }
 
         public void Play(EAnimState animState, bool loop = true, Action OnComplete = null)
         {
             _Event.Reset();
+            Continue();
             switch (animState)
             {
                 case EAnimState.BalloonFlyingDown:
@@ -108,6 +110,21 @@ namespace GameLogic
 
             _AnimState = animState;
             _Event.OnComplete = OnComplete;
+        }
+
+        public void Pause()
+        {
+            SetAnimSpeed(0);
+        }
+
+        public void Continue()
+        {
+            SetAnimSpeed(1);
+        }
+
+        public void SetAnimSpeed(float speed)
+        {
+            _anim.AnimationState.TimeScale = speed;
         }
 
         private void PlayNormalAnim(EAnimState animState, bool loop = true)

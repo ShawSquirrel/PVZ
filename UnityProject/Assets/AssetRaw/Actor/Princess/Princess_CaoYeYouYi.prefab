@@ -178,7 +178,7 @@ MonoBehaviour:
   calculateTangents: 0
   logErrors: 0
   disableRenderingOnOverride: 1
-  _animationName: 07_attack
+  _animationName: 07_idle
   loop: 0
   timeScale: 1
 --- !u!114 &2236132615168804921
@@ -216,5 +216,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 9.125182, y: 9.139077, z: 0}
-  m_Center: {x: 0.44069004, y: 1.9427207, z: 0}
+  m_Size: {x: 2.909052, y: 4.767062, z: 0}
+  m_Center: {x: 0.005561188, y: 1.9945219, z: 0}

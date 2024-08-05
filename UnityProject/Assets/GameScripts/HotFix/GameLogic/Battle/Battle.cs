@@ -25,8 +25,9 @@ namespace GameLogic
         public EBattleType BattleType;
 
 
-        public void Init(bool isOn)
+        public void Init(int level)
         {
+            Log.Info($"Load {level}");
         }
 
 

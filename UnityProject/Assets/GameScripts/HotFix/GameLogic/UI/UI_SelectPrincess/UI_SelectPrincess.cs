@@ -13,26 +13,23 @@ namespace GameLogic
     public partial class UI_SelectPrincess : UIWindow
     {
         #region 脚本工具生成的代码
-
         private Transform Root_SelectBar;
         private GameObject Item_Select;
         private Transform Root_ToBeSelectedBar;
         private GameObject Item_ToBeSelected;
-        private Button Btn_Exit;
+        private Button Btn_Menu;
         private Button Btn_StartBattle;
-
         protected override void ScriptGenerator()
         {
             Root_SelectBar = FindChild("Panel/Left/Root_SelectBar");
             Item_Select = FindChild("Panel/Left/Root_SelectBar/Item_Select").gameObject;
             Root_ToBeSelectedBar = FindChild("Panel/Right/Root_ToBeSelectedBar");
             Item_ToBeSelected = FindChild("Panel/Right/Root_ToBeSelectedBar/Item_ToBeSelected").gameObject;
-            Btn_Exit = FindChildComponent<Button>("Panel/Right/Btn_Exit");
+            Btn_Menu = FindChildComponent<Button>("Panel/Right/Btn_Menu");
             Btn_StartBattle = FindChildComponent<Button>("Panel/Right/Btn_StartBattle");
-            Btn_Exit.onClick.AddListener(OnClickBtn_ExitBtn);
+            Btn_Menu.onClick.AddListener(OnClickBtn_MenuBtn);
             Btn_StartBattle.onClick.AddListener(OnClickBtn_StartBattleBtn);
         }
-
         #endregion
 
         #region 事件
@@ -46,8 +43,9 @@ namespace GameLogic
             Root_ToBeSelectedBar.gameObject.SetActiveSelf(false);
         }
 
-        private void OnClickBtn_ExitBtn()
+        private void OnClickBtn_MenuBtn()
         {
+            GameModule.UI.ShowUI<UI_Menu>();
         }
 
         protected override void OnCreate()

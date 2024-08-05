@@ -28,7 +28,6 @@ namespace GameLogic
         private async UniTaskVoid OnClickBtn_StartBtn()
         {
             GameApp.Instance.StartGame();
-            Close();
             await UniTask.Yield();
         }
 

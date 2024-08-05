@@ -93,8 +93,6 @@ public partial class GameApp : Singleton<GameApp>
             logic.OnUpdate();
             TProfiler.EndSample();
         }
-
-        Main_Update();
         TProfiler.EndFirstSample();
     }
 

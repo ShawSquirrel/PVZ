@@ -86,6 +86,8 @@ MonoBehaviour:
       componentName: Transform
     - uiElementRegex: Item_
       componentName: GameObject
+    - uiElementRegex: Img_
+      componentName: Image
   m_HybridCLRCustomGlobalSettings:
     HotUpdateAssemblies:
     - GameBase.dll

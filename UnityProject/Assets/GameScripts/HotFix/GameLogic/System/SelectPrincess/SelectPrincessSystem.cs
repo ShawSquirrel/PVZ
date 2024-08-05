@@ -4,7 +4,7 @@ using TEngine;
 
 namespace GameLogic
 {
-    public class SelectPrincessSystem
+    public class SelectPrincessSystem : ASystem
     {
         public Dictionary<EPrincessType, bool> ToBeSelectedPrincessDict = new Dictionary<EPrincessType, bool>();
         public List<EPrincessType> SelectedPrincessList = new List<EPrincessType>();

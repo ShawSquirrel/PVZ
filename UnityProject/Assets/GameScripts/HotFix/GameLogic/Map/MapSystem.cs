@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GameLogic
 {
-    public class MapSystem
+    public class MapSystem : ASystem
     {
         public Transform _parent;
         public Dictionary<Vector2Int, MapData> _mapDataDict = new Dictionary<Vector2Int, MapData>();

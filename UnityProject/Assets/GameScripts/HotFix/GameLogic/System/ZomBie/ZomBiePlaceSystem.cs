@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace GameLogic
 {
-    public class ZomBiePlaceSystem : IZomBiePlaceSystem
+    public class ZomBiePlaceSystem : ASystem
     {
         public Dictionary<int, Vector3> strikePointDict = new Dictionary<int, Vector3>();
         public async UniTask Init()

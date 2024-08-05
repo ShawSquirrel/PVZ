@@ -8,23 +8,27 @@ using UnityEngine;
 
 namespace GameLogic
 {
-
     public enum EBattleType
     {
         SelectPrincessCard,
         Battle
     }
-    
+
     [Serializable]
     public class Battle : Singleton<Battle>
     {
-        public PlantSystem PlantSystem = new PlantSystem();
-        public MapSystem MapSystem = new MapSystem();
-        public ZomBiePlaceSystem ZomBiePlaceSystem = new ZomBiePlaceSystem();
-        public SelectPrincessSystem SelectPrincessSystem = new SelectPrincessSystem();
+        public PlantSystem PlantSystem = ASystem.CreateSystem<PlantSystem>();
+        public MapSystem MapSystem = ASystem.CreateSystem<MapSystem>();
+        public ZomBiePlaceSystem ZomBiePlaceSystem = ASystem.CreateSystem<ZomBiePlaceSystem>();
+        public SelectPrincessSystem SelectPrincessSystem = ASystem.CreateSystem<SelectPrincessSystem>();
         public BattleData BattleData;
         public EBattleType BattleType;
-        
+
+
+        public void Init(bool isOn)
+        {
+        }
+
 
         protected override void Init()
         {
@@ -35,7 +39,7 @@ namespace GameLogic
 
             GameModule.UI.ShowUI<UI_SelectPrincess>(new List<EPrincessType>() { EPrincessType.CaoYeYouYi, EPrincessType.PeiKeLiMu });
             MapGenerate();
-            
+
             ZomBiePlaceSystem.Init().Forget();
         }
 
@@ -43,12 +47,12 @@ namespace GameLogic
         {
             int[,] arr = new int[9, 6];
 
-            
+
             TextAsset textAsset = GameModule.Resource.LoadAsset<TextAsset>("Map6x9");
             string mapStr = textAsset.text;
             string[] mapStrArr = mapStr.Trim('\n').Split('\n');
             int length = mapStrArr[0].Trim(',').Split(',').Length;
-            int hieght = mapStrArr.Length; 
+            int hieght = mapStrArr.Length;
 
             for (int i = 0; i < hieght; i++)
             {
@@ -58,7 +62,7 @@ namespace GameLogic
                     arr[ii, i] = int.Parse(rowArr[ii]);
                 }
             }
-            
+
 
             MapSystem.MapGenerate(arr).Forget();
         }

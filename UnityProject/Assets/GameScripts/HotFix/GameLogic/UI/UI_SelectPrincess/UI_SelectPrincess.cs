@@ -13,30 +13,32 @@ namespace GameLogic
     public partial class UI_SelectPrincess : UIWindow
     {
         #region 脚本工具生成的代码
+
         private Transform Root_SelectBar;
         private GameObject Item_Select;
         private Transform Root_ToBeSelectedBar;
         private GameObject Item_ToBeSelected;
         private Button Btn_Exit;
         private Button Btn_StartBattle;
+
         protected override void ScriptGenerator()
         {
-            Root_SelectBar       = FindChild("Panel/Root_SelectBar");
-            Item_Select          = FindChild("Panel/Root_SelectBar/Item_Select").gameObject;
-            Root_ToBeSelectedBar = FindChild("Panel/Root_ToBeSelectedBar");
-            Item_ToBeSelected    = FindChild("Panel/Root_ToBeSelectedBar/Item_ToBeSelected").gameObject;
-            Btn_Exit             = FindChildComponent<Button>("Panel/Btn_Exit");
-            Btn_StartBattle      = FindChildComponent<Button>("Panel/Btn_StartBattle");
+            Root_SelectBar = FindChild("Panel/Left/Root_SelectBar");
+            Item_Select = FindChild("Panel/Left/Root_SelectBar/Item_Select").gameObject;
+            Root_ToBeSelectedBar = FindChild("Panel/Right/Root_ToBeSelectedBar");
+            Item_ToBeSelected = FindChild("Panel/Right/Root_ToBeSelectedBar/Item_ToBeSelected").gameObject;
+            Btn_Exit = FindChildComponent<Button>("Panel/Right/Btn_Exit");
+            Btn_StartBattle = FindChildComponent<Button>("Panel/Right/Btn_StartBattle");
             Btn_Exit.onClick.AddListener(OnClickBtn_ExitBtn);
             Btn_StartBattle.onClick.AddListener(OnClickBtn_StartBattleBtn);
         }
-
 
         #endregion
 
         #region 事件
 
         #endregion
+
         private void OnClickBtn_StartBattleBtn()
         {
             Btn_StartBattle.gameObject.SetActiveSelf(false);
@@ -55,7 +57,7 @@ namespace GameLogic
             Item_ToBeSelected.SetActive(false);
 
             SelectedPrincessCardPool = GameModule.ObjectPool.CreateSingleSpawnObjectPool<UI_SelectedPrincessCard>();
-            
+
             AddUIEvent(UIEvent.UpdateSelectedPrincess, OnUpdateSelectedPrincess);
             AddUIEvent(UIEvent.ResetSelectPrincess, () => Root_SelectBar.GetComponent<ToggleGroup>().SetAllTogglesOff());
 
@@ -71,7 +73,7 @@ namespace GameLogic
         {
             var dict = Battle.Instance.SelectPrincessSystem.ToBeSelectedPrincessDict;
             var list = Battle.Instance.SelectPrincessSystem.SelectedPrincessList;
-            
+
             foreach (var (key, value) in dict)
             {
                 if (_dict.TryGetValue(key, out SelectPrincessData data) == false)
@@ -87,12 +89,11 @@ namespace GameLogic
         }
 
 
-
         protected override void OnUpdate()
         {
             base.OnUpdate();
             if (Battle.Instance.BattleType != EBattleType.Battle) return;
-            
+
             Toggle activeToggle = Root_SelectBar.GetComponent<ToggleGroup>().GetFirstActiveToggle();
             if (activeToggle == null)
             {
@@ -108,7 +109,7 @@ namespace GameLogic
         private void GenerateSelectPrincessToggle(EPrincessType princessType, bool isOn)
         {
             GameObject toggleObj = Object.Instantiate(Item_ToBeSelected, Root_ToBeSelectedBar);
-            
+
             if (_dict.TryGetValue(princessType, out SelectPrincessData data) == false)
             {
                 data = new SelectPrincessData();
@@ -116,16 +117,16 @@ namespace GameLogic
             }
 
             data.ToBeSelected ??= toggleObj;
-            
+
             toggleObj.name = princessType.ToString();
             toggleObj.SetActive(true);
 
             Toggle toggle = toggleObj.GetComponentInChildren<Toggle>();
             Button button = toggleObj.GetComponentInChildren<Button>();
-            toggle.isOn                                       = isOn;
-            toggle.interactable                               = false;
+            toggle.isOn = isOn;
+            toggle.interactable = false;
             toggle.targetGraphic.GetComponent<Image>().sprite = LoadIcon(princessType);
-            toggle.graphic.GetComponent<Image>().sprite       = LoadIcon(princessType);
+            toggle.graphic.GetComponent<Image>().sprite = LoadIcon(princessType);
 
             button.onClick.AddListener(OnButtonClick);
 
@@ -143,7 +144,7 @@ namespace GameLogic
         }
 
         private Dictionary<EPrincessType, SelectPrincessData> _dict = new Dictionary<EPrincessType, SelectPrincessData>();
-        
+
         public class SelectPrincessData
         {
             public GameObject ToBeSelected;
@@ -179,7 +180,7 @@ namespace GameLogic
                 {
                     GameObject target = Object.Instantiate(Item_Select, Root_SelectBar);
                     ret = UI_SelectedPrincessCard.CreateInstance(target) as T;
-                    SelectedPrincessCardPool.Register(ret as UI_SelectedPrincessCard,true);
+                    SelectedPrincessCardPool.Register(ret as UI_SelectedPrincessCard, true);
                 }
 
                 return ret;

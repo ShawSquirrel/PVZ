@@ -7683,7 +7683,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AtlasCommon #171_360
+      name: Diamond
       rect:
         serializedVersion: 2
         x: 1594
@@ -8971,7 +8971,6 @@ TextureImporter:
       AtlasCommon #171_358: 636834338
       AtlasCommon #171_359: -103434186
       AtlasCommon #171_36: 882827846
-      AtlasCommon #171_360: 1458530441
       AtlasCommon #171_361: 225292585
       AtlasCommon #171_362: -1921299973
       AtlasCommon #171_363: 1242069964
@@ -9087,6 +9086,7 @@ TextureImporter:
       AtlasCommon #171_98: -1570670589
       AtlasCommon #171_99: 165464569
       Board: 284603439
+      Diamond: 1458530441
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

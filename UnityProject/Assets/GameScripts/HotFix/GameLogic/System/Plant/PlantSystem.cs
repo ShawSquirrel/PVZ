@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 
 namespace GameLogic
 {
-    public class PlantSystem : IPlantSystem
+    public class PlantSystem : ASystem
     {
         public bool CanPlant => SelectedPrincessType.Value != EPrincessType.Null;
 
@@ -16,7 +16,6 @@ namespace GameLogic
         public void Init()
         {
             SelectedPrincessType.AddListener(OnSelectedPrincessTypeChanged);
-            Utility.Unity.AddUpdateListener(OnUpdate);
         }
 
 
@@ -63,12 +62,14 @@ namespace GameLogic
             }
         }
 
-        private void OnUpdate()
+
+        protected override void Update()
         {
             if (_selectPrincess != null)
             {
                 _selectPrincess._TF.position = MouseHelper.GetMousePointToWorldPoint();
             }
         }
+
     }
 }

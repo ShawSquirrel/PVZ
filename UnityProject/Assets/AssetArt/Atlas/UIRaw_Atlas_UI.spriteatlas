@@ -70,14 +70,18 @@ SpriteAtlas:
       enableAlphaDilation: 0
     secondaryTextureSettings: {}
     variantMultiplier: 1
-    packables: []
+    packables:
+    - {fileID: 235508392, guid: e4d6f452bf512cb4d84b4b8f732b4900, type: 3}
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
-    packedSpriteRenderDataKeys: []
+    packedSpriteRenderDataKeys:
+    - e4d6f452bf512cb4d84b4b8f732b4900: 235508392
   m_MasterAtlas: {fileID: 0}
-  m_PackedSprites: []
-  m_PackedSpriteNamesToIndex: []
+  m_PackedSprites:
+  - {fileID: 235508392, guid: e4d6f452bf512cb4d84b4b8f732b4900, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - AtlasCommon #171_0
   m_RenderDataMap: {}
   m_Tag: UIRaw_Atlas_UI
   m_IsVariant: 0

@@ -15,7 +15,13 @@ namespace GameLogic
 
         public async UniTask Attack(IFsm<APrincess> fsm)
         {
-            fsm.Owner._Anim.Play(EAnimState.Attack, false, () => ChangeState<Idle_Princess>(fsm));
+            float time = Time.time;
+            Log.Debug($"Start {time}");
+            fsm.Owner._Anim.Play(EAnimState.Attack, false, () =>
+            {
+                Log.Debug($"End {Time.time - time}");
+                ChangeState<Idle_Princess>(fsm);
+            });
             await fsm.Owner.Attack();
         }
         

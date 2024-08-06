@@ -17,8 +17,7 @@ namespace GameLogic
         private async UniTask Attack(IFsm<AZonBie> fsm)
         {
             fsm.Owner._Rigid.velocity = Vector3.zero;
-            Log.Debug($"Start {Time.time}");
-            fsm.Owner._Anim.Play(EAnimState.Attack, false, () => Log.Debug($"End {Time.time}"));
+            fsm.Owner._Anim.Play(EAnimState.Attack, false, () => ChangeState<Idle_ZonBie>(fsm));
             await fsm.Owner.Attack();
         }
 

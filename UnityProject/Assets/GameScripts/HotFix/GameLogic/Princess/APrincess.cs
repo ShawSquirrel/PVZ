@@ -63,6 +63,8 @@ namespace GameLogic
 
         public virtual void PlantCallBack(MapData mapData)
         {
+            _Anim.ResetAnim();
+            _Anim.Continue();
             _FSM = GameModule.Fsm.CreateFsm($"{PrincessType.ToString()} {GetHashCode()}", this, new List<FsmState<APrincess>>()
             {
                 new Attack_Princess(),
@@ -72,7 +74,7 @@ namespace GameLogic
             _FSM.Start<Idle_Princess>();
             _IsDie = false;
             EnableCollider();
-            _Anim.Continue();
+            
 
             _TF.transform.position = mapData._MapItem._TF.position;
         }
@@ -90,7 +92,7 @@ namespace GameLogic
 
         public virtual void Die()
         {
-            _Anim.Reset();
+            _Anim.ResetAnim();
             GameModule.Fsm.DestroyFsm<APrincess>(_FSM.Name);
         }
 

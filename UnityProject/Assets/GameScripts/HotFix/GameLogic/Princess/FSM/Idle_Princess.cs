@@ -1,6 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using GameConfig;
 using TEngine;
+using UnityEngine;
 
 namespace GameLogic
 {
@@ -10,8 +11,8 @@ namespace GameLogic
         protected override void OnEnter(IFsm<APrincess> fsm)
         {
             base.OnEnter(fsm);
-            isAttackCheck = false;
             fsm.Owner._Anim.Play(EAnimState.Idle);
+            ChangeToAttack(fsm).Forget();
         }
 
         protected override void OnUpdate(IFsm<APrincess> fsm, float elapseSeconds, float realElapseSeconds)
@@ -24,11 +25,12 @@ namespace GameLogic
                 return;
             }
             
-            if (fsm.Owner.AttackCheck() && isAttackCheck == false)
-            {
-                isAttackCheck = true;
-                ChangeToAttack(fsm).Forget();
-            }
+            // if (fsm.Owner.AttackCheck() && isAttackCheck == false)
+            // {
+            //     Log.Info($"{GetType()} : {Time.time}");
+            //     isAttackCheck = true;
+            //     ChangeToAttack(fsm).Forget();
+            // }
         }
 
         private async UniTask ChangeToAttack(IFsm<APrincess> fsm)
@@ -38,9 +40,6 @@ namespace GameLogic
             {
                 ChangeState<Attack_Princess>(fsm);
             }
-            await UniTask.Delay(1000);
-            isAttackCheck = false;
-
         }
     }
 }

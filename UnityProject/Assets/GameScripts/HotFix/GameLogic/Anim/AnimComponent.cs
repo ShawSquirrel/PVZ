@@ -4,6 +4,7 @@ using GameConfig;
 using Sirenix.OdinInspector;
 using Spine;
 using Spine.Unity;
+using TEngine;
 using UnityEngine;
 
 namespace GameLogic
@@ -38,7 +39,7 @@ namespace GameLogic
 
         private void OnComplete(TrackEntry trackentry)
         {
-            _AnimState = (EAnimState)999;
+            // _AnimState = (EAnimState)999;
             _Event.OnComplete?.Invoke();
             _Event.Reset();
             
@@ -122,9 +123,8 @@ namespace GameLogic
             SetAnimSpeed(1);
         }
 
-        public void Reset()
+        public void ResetAnim()
         {
-            _AnimState = (EAnimState)999;
             _Event.Reset();
             _anim.AnimationState.ClearTracks();
         }
@@ -175,7 +175,8 @@ namespace GameLogic
         [Button("TestPlay")]
         public void TestPlay()
         {
-            Play(_TestState);
+            float time = Time.time;
+            Play(_TestState, true, () => Log.Debug($"Complete {Time.time - time}"));
         }
     }
 

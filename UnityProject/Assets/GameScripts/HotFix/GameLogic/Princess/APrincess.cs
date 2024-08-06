@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace GameLogic
 {
-    public class APrincess : ObjectBase, IPrincess, IUnit, IPlant, IAnim, IActorFSM<APrincess>, IAttribute, IAttack, IDie
+    public class APrincess : ObjectBase, IPrincess, IUnit, IPlant, IAnim, IActorFSM<APrincess>, IAttribute, IAttack, IDie, IDamage
     {
         public GameObject _Obj { get; set; }
         public Transform _TF { get; set; }
@@ -38,15 +38,17 @@ namespace GameLogic
 
         protected override void EndObjectInitialize()
         {
-            _Obj  = Target as GameObject;
-            _TF   = _Obj.transform;
+            _Obj = Target as GameObject;
+            _TF = _Obj.transform;
             _Anim = _TF.Find("Body").GetComponent<IAnimComponent>();
             _Anim.Pause();
+            _TF.Find("Body").gameObject.AddComponent<Reference>().Entity = this;
             _FSM = GameModule.Fsm.CreateFsm($"{PrincessType.ToString()} {GetHashCode()}", this, new List<FsmState<APrincess>>()
-                                                                               {
-                                                                                   new Attack_Princess(),
-                                                                                   new Idle_Princess()
-                                                                               });
+            {
+                new Attack_Princess(),
+                new Idle_Princess(),
+                new Die_Princess(),
+            });
         }
 
         public static T CreateInstance<T>(EPrincessType princessType) where T : ObjectBase, new()
@@ -75,12 +77,23 @@ namespace GameLogic
 
         public virtual async UniTask Attack()
         {
-            
         }
 
         public bool _IsDie { get; set; }
+
         public virtual void Die()
         {
+            
+        }
+
+        public void Damage(float attack)
+        {
+            _AttributeDict.AddValue(EAttributeType.HitPoint, attack * -1);
+
+            if ((int)_AttributeDict.GetValue(EAttributeType.HitPoint) <= 0)
+            {
+                _IsDie = true;
+            }
         }
     }
 }

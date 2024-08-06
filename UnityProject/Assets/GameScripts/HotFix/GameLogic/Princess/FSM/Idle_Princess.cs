@@ -15,6 +15,13 @@ namespace GameLogic
         protected override void OnUpdate(IFsm<APrincess> fsm, float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(fsm, elapseSeconds, realElapseSeconds);
+            
+            if (fsm.Owner._IsDie == true)
+            {
+                ChangeState<Die_Princess>(fsm);
+                return;
+            }
+            
             if (fsm.Owner.AttackCheck())
             {
                 ChangeState<Attack_Princess>(fsm);

@@ -16,10 +16,12 @@ namespace GameLogic
             fsm.Owner._Rigid.velocity = Vector3.zero;
         }
 
-        private void Attack(IFsm<AZonBie> fsm)
+        private async UniTask Attack(IFsm<AZonBie> fsm)
         {
             isAttackComplete = false;
             fsm.Owner._Anim.Play(EAnimState.Attack, false, () => isAttackComplete = true);
+            await fsm.Owner.Attack();
+
         }
 
         protected override void OnUpdate(IFsm<AZonBie> fsm, float elapseSeconds, float realElapseSeconds)
@@ -35,7 +37,7 @@ namespace GameLogic
 
             if (fsm.Owner.AttackCheck())
             {
-                Attack(fsm);
+                Attack(fsm).Forget();
             }
             else
             {

@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using GameLogic;
@@ -29,7 +28,7 @@ public partial class GameApp
         await GameInit();
 
         GameModule.UI.ShowUIAsync<UI_Main>();
-        await UniTask.CompletedTask;
+        await UniTask.WaitUntil(() => GameModule.UI.IsAnyLoading() == false);
         await HideSplash();
     }
 
@@ -94,6 +93,7 @@ public partial class GameApp
 
     public void LoadLevel(int level = 0)
     {
+        GameModule.UI.CloseAll();
         Battle.Instance.Active();
         Battle.Instance.Init(level);
     }

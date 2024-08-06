@@ -26,7 +26,6 @@ namespace GameLogic
         
         private void OnLevelButtonClick(int i)
         {
-            Close();
             GameApp.Instance.LoadLevel(i);
         }
     }

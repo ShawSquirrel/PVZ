@@ -1,4 +1,6 @@
-﻿using GameConfig;
+﻿using Cysharp.Threading.Tasks;
+using GameConfig;
+using TEngine;
 using UnityEngine;
 
 namespace GameLogic
@@ -8,7 +10,8 @@ namespace GameLogic
         protected override void EndObjectInitialize()
         {
             base.EndObjectInitialize();
-            _AttributeDict.SetValue(EAttributeType.HitPoint, 100);
+            _AttributeDict.SetValue(EAttributeType.HitPoint, 1000);
+            _AttributeDict.SetValue(EAttributeType.Attack, 30);
         }
 
         public override void Die()
@@ -33,6 +36,25 @@ namespace GameLogic
             }
 
             return false;
+        }
+
+        public override async UniTask Attack()
+        {
+            await UniTask.Delay(300);
+            Log.Info($"{GetType()} Attack ");
+            Vector3 origin = _TF.transform.position;
+            Vector3 direction = -_TF.right;
+            Debug.DrawLine(origin, origin + direction * 1f, Color.red);
+            var gather = RayHelper.Raycast(origin, direction, 1f, 1 << LayerMask.NameToLayer("Princess"));
+
+
+            var reference = gather.hitInfo.transform.GetComponent<Reference>();
+            if (reference != null && reference.Entity is APrincess princess)
+            {
+                princess.Damage(_AttributeDict.GetValue(EAttributeType.Attack));
+            }
+
+            await UniTask.Yield();
         }
     }
 }

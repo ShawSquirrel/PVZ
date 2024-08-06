@@ -25,7 +25,7 @@ namespace GameLogic
             Vector3 origin = _TF.transform.position;
             Vector3 direction = _TF.right;
 
-            return RayHelper.RayCheck(origin, direction, 10f, 1 << LayerMask.NameToLayer("ZonBie"), Color.yellow);
+            return RayHelper.Raycast(origin, direction, 10f, 1 << LayerMask.NameToLayer("ZonBie"), Color.yellow).isCast;
         }
 
         public override async UniTask Attack()
@@ -33,8 +33,13 @@ namespace GameLogic
             await base.Attack();
             await UniTask.Delay(300);
             Bullet bullet = PoolHelper.Spawn<Bullet>();
-            bullet._TF.position    = _TF.Find("AttackPoint").position;
+            bullet._TF.position = _TF.Find("AttackPoint").position;
             bullet._Rigid.velocity = Vector3.right * 3;
+        }
+
+        public override void Die()
+        {
+            PoolHelper.UnSpawn(this);
         }
     }
 }

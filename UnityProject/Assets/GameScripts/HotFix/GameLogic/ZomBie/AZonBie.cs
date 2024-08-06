@@ -40,25 +40,25 @@ namespace GameLogic
 
         protected override void EndObjectInitialize()
         {
-            _Obj                                 =  Target as GameObject;
-            _TF                                  =  _Obj.transform;
-            _Anim                                =  _TF.Find("Body").GetComponent<IAnimComponent>();
-            _Rigid                               =  _Obj.GetComponent<Rigidbody>();
-            
+            _Obj = Target as GameObject;
+            _TF = _Obj.transform;
+            _Anim = _TF.Find("Body").GetComponent<IAnimComponent>();
+            _Rigid = _Obj.GetComponent<Rigidbody>();
+
             _FSM = GameModule.Fsm.CreateFsm(this, new List<FsmState<AZonBie>>()
-                                                 {
-                                                    new Attack_ZonBie(),
-                                                    new Idle_ZonBie(),
-                                                    new Walk_ZonBie(),
-                                                    new Die_ZonBie()
-                                                 });
+            {
+                new Attack_ZonBie(),
+                new Idle_ZonBie(),
+                new Walk_ZonBie(),
+                new Die_ZonBie()
+            });
             _FSM.Start<Walk_ZonBie>();
-            
-            _Trigger3DEvent                      =  _TF.Find("Body").gameObject.AddComponent<Trigger3DEvent>();
-            _Trigger3DEvent._Entity              =  this;
-            _Trigger3DEvent.TriggerStay3DAction  += OnTriggerStay3DAction;
+
+            _Trigger3DEvent = _TF.Find("Body").gameObject.AddComponent<Trigger3DEvent>();
+            _Trigger3DEvent._Entity = this;
+            _Trigger3DEvent.TriggerStay3DAction += OnTriggerStay3DAction;
             _Trigger3DEvent.TriggerEnter3DAction += OnTriggerEnter3DAction;
-            _Trigger3DEvent.TriggerExit3DAction  += OnTriggerExit3DAction;
+            _Trigger3DEvent.TriggerExit3DAction += OnTriggerExit3DAction;
         }
 
         protected virtual void OnTriggerEnter3DAction(Collider collider)
@@ -71,9 +71,9 @@ namespace GameLogic
                 if (skill is IAttribute attribute)
                 {
                     float atk = attribute._AttributeDict.GetValue(EAttributeType.Attack);
-                    
+
                     _AttributeDict.AddValue(EAttributeType.HitPoint, -atk);
-                    
+
                     Log.Debug($"被伤害 :: {skill._TF.name}  下降 :: {atk}  剩余 :: {_AttributeDict.GetValue(EAttributeType.HitPoint)}");
 
 
@@ -111,7 +111,7 @@ namespace GameLogic
             return false;
         }
 
-        public async UniTask Attack()
+        public virtual async UniTask Attack()
         {
             await UniTask.CompletedTask;
         }

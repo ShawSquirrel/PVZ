@@ -8,4 +8,11 @@ namespace GameLogic
 
         public UniTask Attack();
     }
+
+    public interface IDamage
+    {
+        // public bool AttackCheck();
+
+        public void Damage(float attack);
+    }
 }

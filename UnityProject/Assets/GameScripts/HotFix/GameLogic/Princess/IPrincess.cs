@@ -2,7 +2,7 @@
 
 namespace GameLogic
 {
-    public interface IPrincess
+    public interface IPrincess : IEntity
     {
         public EPrincessType PrincessType { get; }
     }

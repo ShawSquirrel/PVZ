@@ -27,8 +27,7 @@ namespace GameLogic
 
         private async UniTaskVoid OnClickBtn_StartBtn()
         {
-            GameApp.Instance.StartGame();
-            await UniTask.Yield();
+            await GameApp.Instance.StartGame();
         }
 
         #endregion

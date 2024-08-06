@@ -5,7 +5,7 @@ using TEngine;
 
 namespace GameLogic
 {
-    [Window(UILayer.UI)]
+    [Window(UILayer.Top)]
     partial class UI_LoadSplash : UIWindow
     {
         #region 脚本工具生成的代码

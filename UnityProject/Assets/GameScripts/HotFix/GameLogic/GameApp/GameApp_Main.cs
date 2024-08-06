@@ -1,5 +1,7 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using GameLogic;
 using TEngine;
 using UnityEngine;
@@ -28,6 +30,30 @@ public partial class GameApp
 
         GameModule.UI.ShowUIAsync<UI_Main>();
         await UniTask.CompletedTask;
+        await HideSplash();
+    }
+
+    public async UniTask ShowSplash()
+    {
+        GameModule.UI.ShowUIAsync<UI_LoadSplash>();
+
+        await UniTask.WaitUntil(() => GameModule.UI.IsAnyLoading() == false);
+        bool isComplete = false;
+        DOTween.To(() => 0f, value => GameEvent.Send(UIEvent.SetLoadSplash, value), 1f, 1f)
+           .OnComplete(() => isComplete = true);
+        await UniTask.WaitUntil(() => isComplete);
+    }
+
+    public async UniTask HideSplash()
+    {
+        GameModule.UI.ShowUIAsync<UI_LoadSplash>();
+
+        await UniTask.WaitUntil(() => GameModule.UI.IsAnyLoading() == false);
+        bool isComplete = false;
+        DOTween.To(() => 1f, value => GameEvent.Send(UIEvent.SetLoadSplash, value), 0f, 1f)
+           .OnComplete(() => isComplete = true);
+        await UniTask.WaitUntil(() => isComplete);
+        GameModule.UI.CloseUI<UI_LoadSplash>();
     }
 
     private GameData LoadConfig()
@@ -59,10 +85,11 @@ public partial class GameApp
         await UniTask.CompletedTask;
     }
 
-    public void StartGame()
+    public async UniTask StartGame()
     {
+        await ShowSplash();
         GameModule.UI.ShowUI<UI_SelectLevel>();
-        // Battle.Instance.Active();
+        await HideSplash();
     }
 
     public void LoadLevel(int level = 0)

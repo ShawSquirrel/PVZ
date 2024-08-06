@@ -122,6 +122,13 @@ namespace GameLogic
             SetAnimSpeed(1);
         }
 
+        public void Reset()
+        {
+            _AnimState = (EAnimState)999;
+            _Event.Reset();
+            _anim.AnimationState.ClearTracks();
+        }
+
         public void SetAnimSpeed(float speed)
         {
             _anim.AnimationState.TimeScale = speed;

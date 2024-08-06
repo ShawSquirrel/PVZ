@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace GameLogic
 {
@@ -11,8 +12,13 @@ namespace GameLogic
 
     public interface IDamage
     {
-        // public bool AttackCheck();
-
         public void Damage(float attack);
+    }
+
+    public interface IBoxCollider
+    {
+        public BoxCollider _BoxCollider { get; set; }
+        public void EnableCollider();
+        public void DisableCollider();
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GameLogic
 {
-    public class Walk_ZonBie : FsmState<AZonBie>
+    public class Walk_ZonBie : ZonBieState
     {
         protected override void OnEnter(IFsm<AZonBie> fsm)
         {
@@ -17,15 +17,12 @@ namespace GameLogic
         protected override void OnUpdate(IFsm<AZonBie> fsm, float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(fsm, elapseSeconds, realElapseSeconds);
-            if (fsm.Owner._IsDie == true)
-            {
-                ChangeState<Die_ZonBie>(fsm);
-                return;
-            }
-
+            
+            if (CheckDie(fsm)) return;
+            
             if (fsm.Owner.AttackCheck())
             {
-                ChangeState<Attack_ZonBie>(fsm);
+                ChangeState<Idle_ZonBie>(fsm);
                 return;
             }
         }

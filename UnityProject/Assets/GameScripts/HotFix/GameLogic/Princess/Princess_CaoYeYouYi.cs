@@ -39,6 +39,7 @@ namespace GameLogic
 
         public override void Die()
         {
+            base.Die();
             PoolHelper.UnSpawn(this);
         }
     }

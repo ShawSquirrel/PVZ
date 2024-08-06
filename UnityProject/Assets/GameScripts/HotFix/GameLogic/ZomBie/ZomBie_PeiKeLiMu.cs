@@ -47,11 +47,13 @@ namespace GameLogic
             Debug.DrawLine(origin, origin + direction * 1f, Color.red);
             var gather = RayHelper.Raycast(origin, direction, 1f, 1 << LayerMask.NameToLayer("Princess"));
 
-
-            var reference = gather.hitInfo.transform.GetComponent<Reference>();
-            if (reference != null && reference.Entity is APrincess princess)
+            if (gather.isCast)
             {
-                princess.Damage(_AttributeDict.GetValue(EAttributeType.Attack));
+                var reference = gather.hitInfo.transform.GetComponent<Reference>();
+                if (reference != null && reference.Entity is APrincess princess)
+                {
+                    princess.Damage(_AttributeDict.GetValue(EAttributeType.Attack));
+                }
             }
 
             await UniTask.Yield();

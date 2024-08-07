@@ -7,10 +7,12 @@ namespace GameLogic
 {
     public class ZomBie_PeiKeLiMu : AZonBie
     {
+        public override EZombieType ZombieType => EZombieType.PeiKeLiMu;
+
         protected override void EndObjectInitialize()
         {
             base.EndObjectInitialize();
-            _AttributeDict.SetValue(EAttributeType.HitPoint, 1000);
+            _AttributeDict.SetValue(EAttributeType.HitPoint, 100);
             _AttributeDict.SetValue(EAttributeType.Attack, 30);
         }
 

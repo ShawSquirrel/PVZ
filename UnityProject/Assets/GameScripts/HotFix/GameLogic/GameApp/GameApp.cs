@@ -41,8 +41,14 @@ public partial class GameApp : Singleton<GameApp>
     /// </summary>
     private void StartGameLogic()
     {
-        StartMain().Forget();
-        
+        if (Test.isTest == false)
+        {
+            StartMain().Forget();
+        }
+        else
+        {
+            Test.Start();
+        }
     }
 
     /// <summary>

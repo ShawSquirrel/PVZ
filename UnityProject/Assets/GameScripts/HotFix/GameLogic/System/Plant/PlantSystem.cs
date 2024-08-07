@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using GameConfig;
 using TEngine;
 using UnityEngine;
@@ -6,10 +7,17 @@ using Object = UnityEngine.Object;
 
 namespace GameLogic
 {
+    public class CardData
+    {
+        public EPrincessType PrincessType;
+        public float CoolDown;
+        public float MaxCoolDown;
+        public int Cost;
+    }
+
     public class PlantSystem : ASystem
     {
         public bool CanPlant => SelectedPrincessType.Value != EPrincessType.Null;
-
         public BindValue<EPrincessType> SelectedPrincessType = new BindValue<EPrincessType>();
         private APrincess _selectPrincess;
 
@@ -35,7 +43,7 @@ namespace GameLogic
             }
 
             _selectPrincess = null;
-            
+
             switch (currentPrincessType)
             {
                 case EPrincessType.CaoYeYouYi:
@@ -70,6 +78,5 @@ namespace GameLogic
                 _selectPrincess._TF.position = MouseHelper.GetMousePointToWorldPoint();
             }
         }
-
     }
 }

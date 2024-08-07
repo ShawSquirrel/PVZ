@@ -8,6 +8,8 @@ namespace GameLogic
 {
     public class AZonBie : ObjectBase, IEntity, IZomBie, IUnit, IAnim, IMove, ITrigger, IAttribute, IDie, IActorFSM<AZonBie>, IAttack
     {
+        public virtual EZombieType ZombieType { get; }
+
         public GameObject _Obj { get; set; }
         public Transform _TF { get; set; }
         public IAnimComponent _Anim { get; set; }
@@ -29,12 +31,22 @@ namespace GameLogic
         protected override void OnSpawn()
         {
             base.OnSpawn();
+            _Anim.ResetAnim();
+            _FSM = GameModule.Fsm.CreateFsm($"{ZombieType} {GetHashCode()}", this, new List<FsmState<AZonBie>>()
+            {
+                new Attack_ZonBie(),
+                new Idle_ZonBie(),
+                new Walk_ZonBie(),
+                new Die_ZonBie()
+            });
+            _FSM.Start<Walk_ZonBie>();
             _Obj.SetActiveSelf(true);
         }
 
         protected override void OnUnSpawn()
         {
             base.OnUnSpawn();
+            GameModule.Fsm.DestroyFsm<AZonBie>(_FSM.Name);
             _Obj.SetActiveSelf(false);
         }
 
@@ -45,14 +57,7 @@ namespace GameLogic
             _Anim = _TF.Find("Body").GetComponent<IAnimComponent>();
             _Rigid = _Obj.GetComponent<Rigidbody>();
 
-            _FSM = GameModule.Fsm.CreateFsm(this, new List<FsmState<AZonBie>>()
-            {
-                new Attack_ZonBie(),
-                new Idle_ZonBie(),
-                new Walk_ZonBie(),
-                new Die_ZonBie()
-            });
-            _FSM.Start<Walk_ZonBie>();
+            
 
             _Trigger3DEvent = _TF.Find("Body").gameObject.AddComponent<Trigger3DEvent>();
             _Trigger3DEvent._Entity = this;
@@ -115,5 +120,6 @@ namespace GameLogic
         {
             await UniTask.CompletedTask;
         }
+
     }
 }

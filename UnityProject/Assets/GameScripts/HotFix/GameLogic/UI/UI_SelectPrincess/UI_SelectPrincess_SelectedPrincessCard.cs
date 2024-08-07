@@ -8,44 +8,49 @@ namespace GameLogic
 {
     public partial class UI_SelectPrincess
     {
-        public List<UI_SelectedPrincessCard> SelectedPrincessCardList = new List<UI_SelectedPrincessCard>();
-        public IObjectPool<UI_SelectedPrincessCard> SelectedPrincessCardPool;
+        private List<UI_SelectedPrincessCard> _selectedPrincessCardList = new List<UI_SelectedPrincessCard>();
+        private IObjectPool<UI_SelectedPrincessCard> _selectedPrincessCardPool;
 
         private void UpdateSelectPrincessCard(List<EPrincessType> list)
         {
-            if (SelectedPrincessCardList.Count < list.Count)
+            if (_selectedPrincessCardList.Count < list.Count)
             {
-                for (int i = 0; i < list.Count - SelectedPrincessCardList.Count; i++)
+                for (int i = 0; i < list.Count - _selectedPrincessCardList.Count; i++)
                 {
-                    SelectedPrincessCardList.Add(Spawn<UI_SelectedPrincessCard>());
+                    _selectedPrincessCardList.Add(Spawn<UI_SelectedPrincessCard>());
                 }
             }
             else
             {
-                for (int i = SelectedPrincessCardList.Count - 1; i >= list.Count; i--)
+                for (int i = _selectedPrincessCardList.Count - 1; i >= list.Count; i--)
                 {
-                    SelectedPrincessCardPool.Unspawn(SelectedPrincessCardList[i]);
-                    SelectedPrincessCardList.Remove(SelectedPrincessCardList[i]);
+                    _selectedPrincessCardPool.Unspawn(_selectedPrincessCardList[i]);
+                    _selectedPrincessCardList.Remove(_selectedPrincessCardList[i]);
                 }
             }
 
             for (int i = 0; i < list.Count; i++)
             {
-                UI_SelectedPrincessCard card = SelectedPrincessCardList[i];
+                UI_SelectedPrincessCard card = _selectedPrincessCardList[i];
                 card.Init(list[i], _dict);
             }
         }
 
-        public class UI_SelectedPrincessCard : ObjectBase
+        public class UI_SelectedPrincessCard : ObjectBase, IUnit
         {
+            public EPrincessType _PrincessType;
+            public GameObject _Obj { get; set; }
+            public Transform _TF { get; set; }
             private Toggle _toggle;
             private Button _button;
 
             protected override void EndObjectInitialize()
             {
                 base.EndObjectInitialize();
-                _toggle = (Target as GameObject).GetComponentInChildren<Toggle>();
-                _button = (Target as GameObject).GetComponentInChildren<Button>();
+                _Obj    = Target as GameObject;
+                _TF     = _Obj.transform;
+                _toggle = _Obj.GetComponentInChildren<Toggle>();
+                _button = _Obj.GetComponentInChildren<Button>();
             }
 
             public void Init(EPrincessType princessType, Dictionary<EPrincessType, SelectPrincessData> selectPrincessDatas)
@@ -53,7 +58,7 @@ namespace GameLogic
                 Toggle toggle = _toggle;
                 Button button = _button;
 
-
+                _PrincessType                                     = princessType;
                 toggle.name                                       = princessType.ToString();
                 toggle.targetGraphic.GetComponent<Image>().sprite = selectPrincessDatas[princessType].Icon;
                 button.image.sprite                               = selectPrincessDatas[princessType].Icon;
@@ -74,16 +79,32 @@ namespace GameLogic
                 }
             }
 
+            public void Init(PrincessCard princessCard)
+            {
+                if (princessCard.CoolDown == 0)
+                {
+                    _TF.Find("Mask").gameObject.SetActiveSelf(false);
+                    _button.interactable = true;
+                }
+                else
+                {
+                    _TF.Find("Mask").gameObject.SetActiveSelf(true);
+                    _TF.Find("Mask").GetComponent<Image>().fillAmount = princessCard.CoolDown / princessCard.MaxCoolDown;
+                    
+                    _button.interactable = false;
+                }
+            }
+
             protected override void OnSpawn()
             {
                 base.OnSpawn();
-                (Target as GameObject).SetActiveSelf(true);
+                _Obj.SetActiveSelf(true);
             }
 
             protected override void OnUnSpawn()
             {
                 base.OnUnSpawn();
-                (Target as GameObject).SetActiveSelf(false);
+                _Obj.SetActiveSelf(false);
             }
 
             protected override void Release(bool isShutdown)

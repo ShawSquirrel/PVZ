@@ -35,12 +35,14 @@ namespace GameLogic
         #region 事件
 
         #endregion
-
+        
         private void OnClickBtn_StartBattleBtn()
         {
             Btn_StartBattle.gameObject.SetActiveSelf(false);
-            Battle.Instance.BattleType = EBattleType.Battle;
             Root_ToBeSelectedBar.gameObject.SetActiveSelf(false);
+            
+            
+            Battle.Instance.SelectPrincessSystem.ConfirmPrincessCard();
         }
 
         private void OnClickBtn_MenuBtn()
@@ -54,13 +56,13 @@ namespace GameLogic
             Item_Select.SetActive(false);
             Item_ToBeSelected.SetActive(false);
 
-            SelectedPrincessCardPool = GameModule.ObjectPool.CreateSingleSpawnObjectPool<UI_SelectedPrincessCard>();
+            _selectedPrincessCardPool ??= GameModule.ObjectPool.CreateSingleSpawnObjectPool<UI_SelectedPrincessCard>();
 
             AddUIEvent(UIEvent.UpdateSelectedPrincess, OnUpdateSelectedPrincess);
             AddUIEvent(UIEvent.ResetSelectPrincess, () => Root_SelectBar.GetComponent<ToggleGroup>().SetAllTogglesOff());
 
 
-            var princessDict = Battle.Instance.SelectPrincessSystem.ToBeSelectedPrincessDict;
+            var princessDict = Battle.Instance._ToBeSelectedPrincessDict;
             foreach (var (key, value) in princessDict)
             {
                 GenerateSelectPrincessToggle(key, value);
@@ -69,8 +71,8 @@ namespace GameLogic
 
         private void OnUpdateSelectedPrincess()
         {
-            var dict = Battle.Instance.SelectPrincessSystem.ToBeSelectedPrincessDict;
-            var list = Battle.Instance.SelectPrincessSystem.SelectedPrincessList;
+            var dict = Battle.Instance._ToBeSelectedPrincessDict;
+            var list = Battle.Instance._SelectedPrincessList;
 
             foreach (var (key, value) in dict)
             {
@@ -90,17 +92,39 @@ namespace GameLogic
         protected override void OnUpdate()
         {
             base.OnUpdate();
-            if (Battle.Instance.BattleType != EBattleType.Battle) return;
 
-            Toggle activeToggle = Root_SelectBar.GetComponent<ToggleGroup>().GetFirstActiveToggle();
-            if (activeToggle == null)
+            switch (Battle.Instance.BattleType)
             {
-                Battle.Instance.PlantSystem.SelectedPrincessType.Value = EPrincessType.Null;
+                case EBattleType.SelectPrincessCard:
+                    break;
+                case EBattleType.Battle:
+                    
+                    List<PrincessCard> princessCardList = Battle.Instance._PrincessCardList;
+
+                    for (int i = 0; i < princessCardList.Count; i++)
+                    {
+                        PrincessCard princessCard = princessCardList[i];
+                        UI_SelectedPrincessCard selectedPrincessCard = _selectedPrincessCardList[i];
+
+                        if (princessCard.PrincessType == selectedPrincessCard._PrincessType)
+                        {
+                            selectedPrincessCard.Init(princessCard);
+                        }
+                    }
+                    
+                    
+                    Toggle activeToggle = Root_SelectBar.GetComponent<ToggleGroup>().GetFirstActiveToggle();
+                    if (activeToggle == null)
+                    {
+                        Battle.Instance.PlantSystem.SelectedPrincessType.Value = EPrincessType.Null;
+                    }
+                    else
+                    {
+                        Battle.Instance.PlantSystem.SelectedPrincessType.Value = Enum.Parse<EPrincessType>(activeToggle.name);
+                    }
+                    break;
             }
-            else
-            {
-                Battle.Instance.PlantSystem.SelectedPrincessType.Value = Enum.Parse<EPrincessType>(activeToggle.name);
-            }
+            
         }
 
 
@@ -146,7 +170,6 @@ namespace GameLogic
         public class SelectPrincessData
         {
             public GameObject ToBeSelected;
-            public GameObject Selected;
             public Sprite Icon;
         }
 
@@ -170,15 +193,15 @@ namespace GameLogic
             T ret;
             if (typeof(T) == typeof(UI_SelectedPrincessCard))
             {
-                if (SelectedPrincessCardPool.CanSpawn())
+                if (_selectedPrincessCardPool.CanSpawn())
                 {
-                    ret = SelectedPrincessCardPool.Spawn() as T;
+                    ret = _selectedPrincessCardPool.Spawn() as T;
                 }
                 else
                 {
                     GameObject target = Object.Instantiate(Item_Select, Root_SelectBar);
                     ret = UI_SelectedPrincessCard.CreateInstance(target) as T;
-                    SelectedPrincessCardPool.Register(ret as UI_SelectedPrincessCard, true);
+                    _selectedPrincessCardPool.Register(ret as UI_SelectedPrincessCard, true);
                 }
 
                 return ret;

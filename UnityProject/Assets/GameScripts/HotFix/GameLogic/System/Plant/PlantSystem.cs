@@ -60,6 +60,8 @@ namespace GameLogic
                 Log.Info($"{mapData._Princess._TF.name} Plant to {mapData._MapItem._TF.name}");
                 _selectPrincess = null;
                 GameEvent.Send(UIEvent.ResetSelectPrincess);
+
+                Battle.Instance.CoolDownSystem.PlantedPrincessCard(mapData._Princess.PrincessType);
             }
         }
 

@@ -7,13 +7,6 @@ using Object = UnityEngine.Object;
 
 namespace GameLogic
 {
-    public class CardData
-    {
-        public EPrincessType PrincessType;
-        public float CoolDown;
-        public float MaxCoolDown;
-        public int Cost;
-    }
 
     public class PlantSystem : ASystem
     {

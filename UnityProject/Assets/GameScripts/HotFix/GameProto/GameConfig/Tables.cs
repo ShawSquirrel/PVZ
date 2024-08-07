@@ -14,16 +14,19 @@ namespace GameConfig
 public partial class Tables
 {
     public TAnim TAnim {get; }
+    public TPrincessCard TPrincessCard {get; }
 
     public Tables(System.Func<string, ByteBuf> loader)
     {
         TAnim = new TAnim(loader("tanim"));
+        TPrincessCard = new TPrincessCard(loader("tprincesscard"));
         ResolveRef();
     }
     
     private void ResolveRef()
     {
         TAnim.ResolveRef(this);
+        TPrincessCard.ResolveRef(this);
     }
 }
 

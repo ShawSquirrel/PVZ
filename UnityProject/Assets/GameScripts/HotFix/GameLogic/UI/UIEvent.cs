@@ -7,4 +7,9 @@
         public static readonly int UpdateSelectedPrincess = "UpdateSelectedPrincess".GetHashCode();
         public static readonly int SetLoadSplash = "SetLoadSplash".GetHashCode();
     }
+    public class Event
+    {
+        public static readonly int ConfirmPrincessCard = "ConfirmPrincessCard".GetHashCode();
+        
+    }
 }

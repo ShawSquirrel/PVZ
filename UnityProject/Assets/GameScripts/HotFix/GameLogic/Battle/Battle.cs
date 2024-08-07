@@ -21,7 +21,7 @@ namespace GameLogic
         public MapSystem MapSystem = ASystem.CreateSystem<MapSystem>();
         public ZomBiePlaceSystem ZomBiePlaceSystem = ASystem.CreateSystem<ZomBiePlaceSystem>();
         public SelectPrincessSystem SelectPrincessSystem = ASystem.CreateSystem<SelectPrincessSystem>();
-        public BattleData BattleData;
+        public CoolDownSystem CoolDownSystem = ASystem.CreateSystem<CoolDownSystem>();
         public EBattleType BattleType;
 
 

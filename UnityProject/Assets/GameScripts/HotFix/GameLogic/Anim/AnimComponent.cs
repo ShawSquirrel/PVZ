@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Policy;
 using GameConfig;
 using Sirenix.OdinInspector;
 using Spine;
 using Spine.Unity;
 using TEngine;
 using UnityEngine;
+using Animation = Spine.Animation;
 
 namespace GameLogic
 {
@@ -21,7 +23,7 @@ namespace GameLogic
         public EAnimState _AnimState;
         private Dictionary<EAnimState, string> _animNameDict = new Dictionary<EAnimState, string>();
         private SkeletonAnimation _anim;
-        
+
         private void Awake()
         {
             if (S_AnimNameDict == null)
@@ -34,21 +36,19 @@ namespace GameLogic
             }
 
             _anim = GetComponent<SkeletonAnimation>();
-            _anim.AnimationState.Complete += OnComplete;
         }
 
         private void OnComplete(TrackEntry trackentry)
         {
-            // _AnimState = (EAnimState)999;
+            Log.Info($"{GetType()} OnComplete");
             _Event.OnComplete?.Invoke();
             _Event.Reset();
-            
+            _anim.AnimationState.GetCurrent(0).Complete -= OnComplete;
         }
 
-        public void Play(EAnimState animState, bool loop = true, Action OnComplete = null)
+        public void Play(EAnimState animState, bool loop = true, Action onComplete = null)
         {
             _Event.Reset();
-            Continue();
             switch (animState)
             {
                 case EAnimState.BalloonFlyingDown:
@@ -110,7 +110,7 @@ namespace GameLogic
             }
 
             _AnimState = animState;
-            _Event.OnComplete = OnComplete;
+            _Event.OnComplete = onComplete;
         }
 
         public void Pause()
@@ -126,7 +126,6 @@ namespace GameLogic
         public void ResetAnim()
         {
             _Event.Reset();
-            _anim.AnimationState.ClearTracks();
         }
 
         public void SetAnimSpeed(float speed)
@@ -134,28 +133,35 @@ namespace GameLogic
             _anim.AnimationState.TimeScale = speed;
         }
 
+        public Animation GetCurrentAnimation(float track)
+        {
+            var currentAnimation = _anim.AnimationState.GetCurrent(0);
+            return currentAnimation.Animation;
+        }
+
         private void PlayNormalAnim(EAnimState animState, bool loop = true)
         {
             if (_AnimState == animState) return;
             if (!_animNameDict.TryGetValue(animState, out string animName))
             {
-                animName = $"{_NormalPrefix}_{S_AnimNameDict[animState]}";
+                animName = CombineAnimName(_NormalPrefix, animState);
                 _animNameDict[animState] = animName;
             }
 
-            _anim.AnimationState.SetAnimation(0, animName, loop);
+            RealPlay(0, loop, animName);
         }
+
 
         private void PlaySkillAnim(EAnimState animState, bool loop = true)
         {
             if (_AnimState == animState) return;
             if (!_animNameDict.TryGetValue(animState, out string animName))
             {
-                animName = $"{_SkillPrefix}_{S_AnimNameDict[animState]}";
+                animName = CombineAnimName(_SkillPrefix, animState);
                 _animNameDict[animState] = animName;
             }
 
-            _anim.AnimationState.SetAnimation(0, animName, loop);
+            RealPlay(0, loop, animName);
         }
 
         private void PlayUniversalAnim(EAnimState animState, bool loop = true)
@@ -163,13 +169,24 @@ namespace GameLogic
             if (_AnimState == animState) return;
             if (!_animNameDict.TryGetValue(animState, out string animName))
             {
-                animName = $"000000_{S_AnimNameDict[animState]}";
+                animName = CombineAnimName("000000_", animState);
                 _animNameDict[animState] = animName;
             }
 
-            _anim.AnimationState.SetAnimation(0, animName, loop);
+            RealPlay(0, loop, animName);
         }
-                
+
+        private string CombineAnimName(string prefix, EAnimState animState)
+        {
+            return $"{prefix}_{S_AnimNameDict[animState]}";
+        }
+
+        private void RealPlay(int tracksIndex, bool loop, string animName)
+        {
+            _anim.AnimationState.SetAnimation(tracksIndex, animName, loop);
+            _anim.AnimationState.GetCurrent(tracksIndex).Complete += OnComplete;
+        }
+
         public EAnimState _TestState;
 
         [Button("TestPlay")]
@@ -179,6 +196,4 @@ namespace GameLogic
             Play(_TestState, true, () => Log.Debug($"Complete {Time.time - time}"));
         }
     }
-
-
 }

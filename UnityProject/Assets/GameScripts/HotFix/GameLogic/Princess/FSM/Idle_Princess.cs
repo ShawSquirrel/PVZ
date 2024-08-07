@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GameLogic
 {
-    public class Idle_Princess : FsmState<APrincess>
+    public class Idle_Princess : PrincessState
     {
         public bool isAttackCheck = false;
         protected override void OnEnter(IFsm<APrincess> fsm)

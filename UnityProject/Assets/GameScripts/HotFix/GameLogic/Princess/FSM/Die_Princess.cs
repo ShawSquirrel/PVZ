@@ -3,7 +3,7 @@ using TEngine;
 
 namespace GameLogic
 {
-    public class Die_Princess : FsmState<APrincess>
+    public class Die_Princess : PrincessState
     {
         protected override void OnEnter(IFsm<APrincess> fsm)
         {

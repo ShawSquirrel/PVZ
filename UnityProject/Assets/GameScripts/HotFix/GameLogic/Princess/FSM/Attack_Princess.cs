@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GameLogic
 {
-    public class Attack_Princess : FsmState<APrincess>
+    public class Attack_Princess : PrincessState
     {
         protected override void OnEnter(IFsm<APrincess> fsm)
         {
@@ -16,10 +16,10 @@ namespace GameLogic
         public async UniTask Attack(IFsm<APrincess> fsm)
         {
             float time = Time.time;
-            Log.Debug($"Start {time}");
+            Log.Error($"Start {time}");
             fsm.Owner._Anim.Play(EAnimState.Attack, false, () =>
             {
-                Log.Debug($"End {Time.time - time}");
+                Log.Error($"End {Time.time - time}");
                 ChangeState<Idle_Princess>(fsm);
             });
             await fsm.Owner.Attack();

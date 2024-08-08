@@ -30,7 +30,7 @@ namespace GameLogic
 
         
         public Dictionary<EPrincessType, bool> _ToBeSelectedPrincessDict = new Dictionary<EPrincessType, bool>();
-        public List<EPrincessType> _SelectedPrincessList = new List<EPrincessType>();
+        // public List<EPrincessType> _SelectedPrincessList = new List<EPrincessType>();
 
         #endregion
         

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
 using GameConfig;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,12 +12,14 @@ namespace GameLogic
     public partial class UI_SelectPrincess : UIWindow
     {
         #region 脚本工具生成的代码
+
         private Transform Root_SelectBar;
         private GameObject Item_Select;
         private Transform Root_ToBeSelectedBar;
         private GameObject Item_ToBeSelected;
         private Button Btn_Menu;
         private Button Btn_StartBattle;
+
         protected override void ScriptGenerator()
         {
             Root_SelectBar = FindChild("Panel/Left/Root_SelectBar");
@@ -30,25 +31,32 @@ namespace GameLogic
             Btn_Menu.onClick.AddListener(OnClickBtn_MenuBtn);
             Btn_StartBattle.onClick.AddListener(OnClickBtn_StartBattleBtn);
         }
+
         #endregion
 
         #region 事件
 
-        #endregion
-        
+        /// <summary>
+        /// 点击开始
+        /// </summary>
         private void OnClickBtn_StartBattleBtn()
         {
             Btn_StartBattle.gameObject.SetActiveSelf(false);
             Root_ToBeSelectedBar.gameObject.SetActiveSelf(false);
-            
-            
+
             Battle.Instance.SelectPrincessSystem.ConfirmPrincessCard();
         }
 
+        /// <summary>
+        /// 点击菜单
+        /// </summary>
         private void OnClickBtn_MenuBtn()
         {
             GameModule.UI.ShowUI<UI_Menu>();
         }
+
+        #endregion
+
 
         protected override void OnCreate()
         {
@@ -56,7 +64,7 @@ namespace GameLogic
             Item_Select.SetActive(false);
             Item_ToBeSelected.SetActive(false);
 
-            _selectedPrincessCardPool ??= GameModule.ObjectPool.CreateSingleSpawnObjectPool<UI_SelectedPrincessCard>();
+            _selectedPrincessCardPool = GameModule.ObjectPool.CreateSingleSpawnObjectPool<UI_SelectedPrincessCard>();
 
             AddUIEvent(UIEvent.UpdateSelectedPrincess, OnUpdateSelectedPrincess);
             AddUIEvent(UIEvent.ResetSelectPrincess, () => Root_SelectBar.GetComponent<ToggleGroup>().SetAllTogglesOff());
@@ -69,10 +77,16 @@ namespace GameLogic
             }
         }
 
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            GameModule.ObjectPool.DestroyObjectPool<UI_SelectedPrincessCard>();
+        }
+
         private void OnUpdateSelectedPrincess()
         {
             var dict = Battle.Instance._ToBeSelectedPrincessDict;
-            var list = Battle.Instance._SelectedPrincessList;
+            var list = Battle.Instance._LeftPrincessCardList;
 
             foreach (var (key, value) in dict)
             {
@@ -98,7 +112,7 @@ namespace GameLogic
                 case EBattleType.SelectPrincessCard:
                     break;
                 case EBattleType.Battle:
-                    
+
                     List<PrincessCard> princessCardList = Battle.Instance._LeftPrincessCardList;
 
                     for (int i = 0; i < princessCardList.Count; i++)
@@ -111,8 +125,8 @@ namespace GameLogic
                             selectedPrincessCard.Init(princessCard);
                         }
                     }
-                    
-                    
+
+
                     Toggle activeToggle = Root_SelectBar.GetComponent<ToggleGroup>().GetFirstActiveToggle();
                     if (activeToggle == null)
                     {
@@ -122,9 +136,9 @@ namespace GameLogic
                     {
                         Battle.Instance.PlantSystem.SelectedPrincessType.Value = Enum.Parse<EPrincessType>(activeToggle.name);
                     }
+
                     break;
             }
-            
         }
 
 

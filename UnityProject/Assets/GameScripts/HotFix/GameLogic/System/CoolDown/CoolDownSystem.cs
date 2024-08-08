@@ -20,7 +20,7 @@ namespace GameLogic
 
         public void PlantedPrincessCard(EPrincessType princessType)
         {
-            List<PrincessCard> _princessCardList = Battle.Instance._PrincessCardList;
+            List<PrincessCard> _princessCardList = Battle.Instance._LeftPrincessCardList;
             foreach (var card in _princessCardList.Where(card => card.PrincessType == princessType))
             {
                 card.CoolDown = card.MaxCoolDown;
@@ -34,7 +34,7 @@ namespace GameLogic
             base.Update();
             if (Battle.Instance.BattleType != EBattleType.Battle) return;
             
-            List<PrincessCard> _princessCardList = Battle.Instance._PrincessCardList;
+            List<PrincessCard> _princessCardList = Battle.Instance._LeftPrincessCardList;
             foreach (PrincessCard princessCard in _princessCardList)
             {
                 princessCard.CoolDown -= Time.deltaTime;

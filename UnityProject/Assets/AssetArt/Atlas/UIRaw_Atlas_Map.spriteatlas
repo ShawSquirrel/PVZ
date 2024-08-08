@@ -76,16 +76,10 @@ SpriteAtlas:
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
-    packedSpriteRenderDataKeys:
-    - 52a8d9d287a7dbb45b6a0821d63c67d0: 21300000
-    - 85c3981d1e8f26a449d3b63c55d7d2c7: 21300000
+    packedSpriteRenderDataKeys: []
   m_MasterAtlas: {fileID: 0}
-  m_PackedSprites:
-  - {fileID: 21300000, guid: 52a8d9d287a7dbb45b6a0821d63c67d0, type: 3}
-  - {fileID: 21300000, guid: 85c3981d1e8f26a449d3b63c55d7d2c7, type: 3}
-  m_PackedSpriteNamesToIndex:
-  - MapRoot@2048
-  - MapItem@256
+  m_PackedSprites: []
+  m_PackedSpriteNamesToIndex: []
   m_RenderDataMap: {}
   m_Tag: UIRaw_Atlas_Map
   m_IsVariant: 0

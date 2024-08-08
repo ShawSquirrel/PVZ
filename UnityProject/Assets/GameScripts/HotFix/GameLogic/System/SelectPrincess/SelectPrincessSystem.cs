@@ -29,7 +29,7 @@ namespace GameLogic
             Battle.Instance.BattleType = EBattleType.Battle;
 
             var config = ConfigSystem.Instance.Tables.TPrincessCard;
-            List<PrincessCard> _princessCardList = Battle.Instance._PrincessCardList;
+            List<PrincessCard> _princessCardList = Battle.Instance._LeftPrincessCardList;
             List<EPrincessType> list = Battle.Instance._SelectedPrincessList;
             _princessCardList.Clear();
             foreach (EPrincessType princessType in list)

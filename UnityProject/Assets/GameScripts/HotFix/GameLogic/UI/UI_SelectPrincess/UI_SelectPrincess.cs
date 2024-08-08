@@ -99,7 +99,7 @@ namespace GameLogic
                     break;
                 case EBattleType.Battle:
                     
-                    List<PrincessCard> princessCardList = Battle.Instance._PrincessCardList;
+                    List<PrincessCard> princessCardList = Battle.Instance._LeftPrincessCardList;
 
                     for (int i = 0; i < princessCardList.Count; i++)
                     {
@@ -148,7 +148,6 @@ namespace GameLogic
             toggle.isOn = isOn;
             toggle.interactable = false;
             toggle.targetGraphic.GetComponent<Image>().sprite = LoadIcon(princessType);
-            toggle.graphic.GetComponent<Image>().sprite = LoadIcon(princessType);
 
             button.onClick.AddListener(OnButtonClick);
 

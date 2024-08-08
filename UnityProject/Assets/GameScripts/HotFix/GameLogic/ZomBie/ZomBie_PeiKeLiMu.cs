@@ -24,20 +24,13 @@ namespace GameLogic
 
         public override bool AttackCheck()
         {
-            // 定义射线的起点为摄像机的当前位置
             Vector3 origin = _TF.transform.position;
-            // 定义射线的方向为摄像机向前看的方向
-            Vector3 direction = -_TF.right;
+            Vector3 direction = _TF.right * -1;
 
-            // 存储射线碰撞结果的变量
-            Debug.DrawLine(origin, origin + direction * 1f, Color.red);
-            // 执行射线检测
-            if (Physics.Raycast(origin, direction, 1f, 1 << LayerMask.NameToLayer("Princess")))
-            {
-                return true;
-            }
 
-            return false;
+            var gather = RayHelper.Raycast(origin, direction, 1f, 1 << LayerMask.NameToLayer("Princess"));
+
+            return gather.isCast;
         }
 
         public override async UniTask Attack()

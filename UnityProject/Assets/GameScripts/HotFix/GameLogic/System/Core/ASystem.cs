@@ -26,7 +26,6 @@ namespace GameLogic
 
         protected virtual void Update()
         {
-            Log.Info($"{GetType()} Update");
         }
 
         ~ASystem()

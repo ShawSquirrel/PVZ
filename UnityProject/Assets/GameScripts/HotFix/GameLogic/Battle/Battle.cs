@@ -25,9 +25,9 @@ namespace GameLogic
         #region Data
 
         
-        public List<PrincessCard> _PrincessCardList = new List<PrincessCard>();
-        
-        
+        public List<PrincessCard> _LeftPrincessCardList = new List<PrincessCard>();
+
+
         
         public Dictionary<EPrincessType, bool> _ToBeSelectedPrincessDict = new Dictionary<EPrincessType, bool>();
         public List<EPrincessType> _SelectedPrincessList = new List<EPrincessType>();

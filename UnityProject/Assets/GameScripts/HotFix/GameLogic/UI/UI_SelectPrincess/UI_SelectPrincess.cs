@@ -71,12 +71,7 @@ namespace GameLogic
             AddUIEvent(UIEvent.ResetSelectPrincess, () => Root_SelectBar.GetComponent<ToggleGroup>().SetAllTogglesOff());
 
 
-            var princessDict = Battle.Instance._OptionalPrincessDict;
-            foreach (var (key, value) in princessDict)
-            {
-                UI_OptionalPrincessCard optionalPrincessCard = Spawn<UI_OptionalPrincessCard>();
-                optionalPrincessCard.Init(value.SelectedPrincessCardData, LoadIcon(value.PrincessType), value.isSelected);
-            }
+            OnUpdateSelectedPrincess();
         }
 
         protected override void OnDestroy()
@@ -89,7 +84,7 @@ namespace GameLogic
         private void OnUpdateSelectedPrincess()
         {
             var dict = Battle.Instance._OptionalPrincessDict;
-            var list = Battle.Instance._LeftPrincessCardList;
+            var list = Battle.Instance._SelectedPrincessCardList;
 
             UpdateOptionalPrincessCard(dict);
             UpdateSelectedPrincessCard(list);
@@ -105,7 +100,7 @@ namespace GameLogic
                     break;
                 case EBattleType.Battle:
 
-                    List<SelectedPrincessCardData> princessCardList = Battle.Instance._LeftPrincessCardList;
+                    List<SelectedPrincessCardData> princessCardList = Battle.Instance._SelectedPrincessCardList;
 
                     for (int i = 0; i < princessCardList.Count; i++)
                     {

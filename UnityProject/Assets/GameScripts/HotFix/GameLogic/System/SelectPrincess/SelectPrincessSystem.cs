@@ -22,57 +22,47 @@ namespace GameLogic
             toBeSelectedPrincessDict.Add(EPrincessType.PeiKeLiMu, optionalPrincessCardData);
         }
 
-        protected override void Awake()
-        {
-            base.Awake();
-            AddListener();
-        }
-
-        private void AddListener()
-        {
-        }
-
         public void ConfirmPrincessCard()
         {
             Battle.Instance.BattleType = EBattleType.Battle;
         }
 
-        public void Selected(EPrincessType selectedPrincessType)
+        public void Selected(EPrincessType princessType)
         {
-            Dictionary<EPrincessType, OptionalPrincessCardData> toBeSelectedPrincessDict = Battle.Instance._OptionalPrincessDict;
-            List<SelectedPrincessCardData> selectedPrincessList = Battle.Instance._LeftPrincessCardList;
+            Dictionary<EPrincessType, OptionalPrincessCardData> optionalPrincessDict = Battle.Instance._OptionalPrincessDict;
+            List<SelectedPrincessCardData> selectedPrincessList = Battle.Instance._SelectedPrincessCardList;
 
-            if (selectedPrincessList.Any(princessCard => princessCard.PrincessType == selectedPrincessType))
+            if (selectedPrincessList.Any(princessCard => princessCard.PrincessType == princessType))
             {
-                Log.Error("SelectPrincessSystem :: Selected");
+                Log.Error($"SelectPrincessSystem :: Selected :: {princessType}");
                 return;
             }
 
             SelectedPrincessCardData cardData = MemoryPool.Acquire<SelectedPrincessCardData>();
-            cardData.Init(selectedPrincessType);
+            cardData.Init(princessType);
 
             selectedPrincessList.Add(cardData);
-            toBeSelectedPrincessDict[selectedPrincessType].isSelected = true;
+            optionalPrincessDict[princessType].isSelected = true;
 
             GameEvent.Send(UIEvent.UpdateSelectedPrincess);
         }
 
-        public void UnSelected(EPrincessType selectedPrincessType)
+        public void UnSelected(EPrincessType princessType)
         {
             Dictionary<EPrincessType, OptionalPrincessCardData> toBeSelectedPrincessDict = Battle.Instance._OptionalPrincessDict;
-            List<SelectedPrincessCardData> selectedPrincessList = Battle.Instance._LeftPrincessCardList;
+            List<SelectedPrincessCardData> selectedPrincessList = Battle.Instance._SelectedPrincessCardList;
 
             bool isContains = false;
 
             foreach (SelectedPrincessCardData princessCard in selectedPrincessList)
             {
-                if (princessCard.PrincessType == selectedPrincessType)
+                if (princessCard.PrincessType == princessType)
                 {
                     isContains = true;
 
                     selectedPrincessList.Remove(princessCard);
                     MemoryPool.Release(princessCard);
-                    toBeSelectedPrincessDict[selectedPrincessType].isSelected = false;
+                    toBeSelectedPrincessDict[princessType].isSelected = false;
 
                     GameEvent.Send(UIEvent.UpdateSelectedPrincess);
 
@@ -82,7 +72,7 @@ namespace GameLogic
 
             if (isContains == false)
             {
-                Log.Error("SelectPrincessSystem :: UnSelected");
+                Log.Error($"SelectPrincessSystem :: UnSelected :: {princessType}");
                 return;
             }
         }

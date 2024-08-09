@@ -25,8 +25,8 @@ namespace GameLogic
 
         #region Data
 
-        public List<SelectedPrincessCardData> _LeftPrincessCardList = new List<SelectedPrincessCardData>();
-        public Dictionary<EPrincessType, OptionalPrincessCardData> _OptionalPrincessDict = new Dictionary<EPrincessType, OptionalPrincessCardData>();
+        public readonly List<SelectedPrincessCardData> _SelectedPrincessCardList = new List<SelectedPrincessCardData>();
+        public readonly Dictionary<EPrincessType, OptionalPrincessCardData> _OptionalPrincessDict = new Dictionary<EPrincessType, OptionalPrincessCardData>();
         public int DiamondCount = 50;
 
         #endregion

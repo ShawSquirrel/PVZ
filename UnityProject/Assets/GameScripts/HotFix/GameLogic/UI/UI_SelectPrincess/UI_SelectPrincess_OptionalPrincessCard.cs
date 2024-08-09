@@ -24,6 +24,7 @@ namespace GameLogic
             {
                 UI_OptionalPrincessCard optionalPrincessCard = Spawn<UI_OptionalPrincessCard>();
                 optionalPrincessCard.Init(value.SelectedPrincessCardData, LoadIcon(key), value.isSelected);
+                _optionalPrincessCardList.Add(optionalPrincessCard);
             }
         }
 

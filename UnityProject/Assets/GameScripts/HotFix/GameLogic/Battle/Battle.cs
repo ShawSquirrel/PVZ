@@ -19,21 +19,18 @@ namespace GameLogic
         public ZomBiePlaceSystem ZomBiePlaceSystem = ASystem.CreateSystem<ZomBiePlaceSystem>();
         public SelectPrincessSystem SelectPrincessSystem = ASystem.CreateSystem<SelectPrincessSystem>();
         public CoolDownSystem CoolDownSystem = ASystem.CreateSystem<CoolDownSystem>();
+        public DiamondSystem DiamondSystem = ASystem.CreateSystem<DiamondSystem>();
         public EBattleType BattleType;
 
 
         #region Data
 
-        
-        public List<PrincessCard> _LeftPrincessCardList = new List<PrincessCard>();
-
-
-        
-        public Dictionary<EPrincessType, bool> _ToBeSelectedPrincessDict = new Dictionary<EPrincessType, bool>();
-        // public List<EPrincessType> _SelectedPrincessList = new List<EPrincessType>();
+        public List<SelectedPrincessCardData> _LeftPrincessCardList = new List<SelectedPrincessCardData>();
+        public Dictionary<EPrincessType, OptionalPrincessCardData> _OptionalPrincessDict = new Dictionary<EPrincessType, OptionalPrincessCardData>();
+        public int DiamondCount = 50;
 
         #endregion
-        
+
 
         public void Init(int level)
         {
@@ -50,6 +47,5 @@ namespace GameLogic
             MapSystem.MapGenerate();
             ZomBiePlaceSystem.Init().Forget();
         }
-        
     }
 }

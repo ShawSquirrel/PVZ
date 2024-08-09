@@ -1,38 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GameConfig;
 using TEngine;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 namespace GameLogic
 {
     public partial class UI_SelectPrincess
     {
-        private List<UI_SelectedPrincessCard> _selectedPrincessCardList = new List<UI_SelectedPrincessCard>();
+        private List<UI_SelectedPrincessCard> _selectedUIPrincessCardList = new List<UI_SelectedPrincessCard>();
         private IObjectPool<UI_SelectedPrincessCard> _selectedPrincessCardPool;
 
-        private void UpdateSelectPrincessCard(List<EPrincessType> list)
+        private void UpdateSelectedPrincessCard(List<SelectedPrincessCardData> list)
         {
-            if (_selectedPrincessCardList.Count < list.Count)
+            foreach (UI_SelectedPrincessCard uiPrincessCard in _selectedUIPrincessCardList)
             {
-                for (int i = 0; i < list.Count - _selectedPrincessCardList.Count; i++)
-                {
-                    _selectedPrincessCardList.Add(Spawn<UI_SelectedPrincessCard>());
-                }
-            }
-            else
-            {
-                for (int i = _selectedPrincessCardList.Count - 1; i >= list.Count; i--)
-                {
-                    _selectedPrincessCardPool.Unspawn(_selectedPrincessCardList[i]);
-                    _selectedPrincessCardList.Remove(_selectedPrincessCardList[i]);
-                }
+                _selectedPrincessCardPool.Unspawn(uiPrincessCard);
             }
 
-            for (int i = 0; i < list.Count; i++)
+            _selectedUIPrincessCardList.Clear();
+
+
+            foreach (SelectedPrincessCardData princessCard in list)
             {
-                UI_SelectedPrincessCard card = _selectedPrincessCardList[i];
-                card.Init(list[i], _dict);
+                UI_SelectedPrincessCard uiPrincessCard = Spawn<UI_SelectedPrincessCard>();
+                uiPrincessCard.Init(princessCard, LoadIcon(princessCard.PrincessType));
+                _selectedUIPrincessCardList.Add(uiPrincessCard);
             }
         }
 
@@ -47,23 +42,48 @@ namespace GameLogic
             protected override void EndObjectInitialize()
             {
                 base.EndObjectInitialize();
-                _Obj    = Target as GameObject;
-                _TF     = _Obj.transform;
+                _Obj = Target as GameObject;
+                _TF = _Obj.transform;
                 _toggle = _Obj.GetComponentInChildren<Toggle>();
                 _button = _Obj.GetComponentInChildren<Button>();
             }
 
-            public void Init(EPrincessType princessType, Dictionary<EPrincessType, SelectPrincessData> selectPrincessDatas)
+            public void Init(SelectedPrincessCardData selectedPrincessCardData, Sprite icon)
             {
                 Toggle toggle = _toggle;
                 Button button = _button;
 
-                _PrincessType                                     = princessType;
-                toggle.name                                       = princessType.ToString();
-                toggle.targetGraphic.GetComponent<Image>().sprite = selectPrincessDatas[princessType].Icon;
-                button.image.sprite                               = selectPrincessDatas[princessType].Icon;
+                _PrincessType = selectedPrincessCardData.PrincessType;
+                toggle.name = selectedPrincessCardData.PrincessType.ToString();
+                toggle.targetGraphic.GetComponent<Image>().sprite = icon;
+                button.image.sprite = icon;
                 button.onClick.RemoveAllListeners();
-                button.onClick.AddListener(() => OnSelectedPrincessToggleClick(princessType));
+                button.onClick.AddListener(() => OnSelectedPrincessToggleClick(selectedPrincessCardData.PrincessType));
+
+                _TF.Find("Cost").GetComponentInChildren<Text>().text = selectedPrincessCardData.Cost.ToString();
+
+                switch (Battle.Instance.BattleType)
+                {
+                    case EBattleType.SelectPrincessCard:
+                        _TF.Find("Mask").gameObject.SetActiveSelf(false);
+                        _button.interactable = true;
+                        break;
+                    case EBattleType.Battle:
+                        if (selectedPrincessCardData.CoolDown == 0)
+                        {
+                            _TF.Find("Mask").gameObject.SetActiveSelf(false);
+                            _button.interactable = true;
+                        }
+                        else
+                        {
+                            _TF.Find("Mask").gameObject.SetActiveSelf(true);
+                            _TF.Find("Mask").GetComponent<Image>().fillAmount = selectedPrincessCardData.CoolDown / selectedPrincessCardData.MaxCoolDown;
+                            _button.interactable = false;
+                        }
+
+                        break;
+                }
+
 
                 void OnSelectedPrincessToggleClick(EPrincessType princessType)
                 {
@@ -76,22 +96,6 @@ namespace GameLogic
                             toggle.isOn = !toggle.isOn;
                             break;
                     }
-                }
-            }
-
-            public void Init(PrincessCard princessCard)
-            {
-                if (princessCard.CoolDown == 0)
-                {
-                    _TF.Find("Mask").gameObject.SetActiveSelf(false);
-                    _button.interactable = true;
-                }
-                else
-                {
-                    _TF.Find("Mask").gameObject.SetActiveSelf(true);
-                    _TF.Find("Mask").GetComponent<Image>().fillAmount = princessCard.CoolDown / princessCard.MaxCoolDown;
-                    
-                    _button.interactable = false;
                 }
             }
 

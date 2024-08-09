@@ -65,15 +65,17 @@ namespace GameLogic
             Item_ToBeSelected.SetActive(false);
 
             _selectedPrincessCardPool = GameModule.ObjectPool.CreateSingleSpawnObjectPool<UI_SelectedPrincessCard>();
+            _optionalPrincessCardPool = GameModule.ObjectPool.CreateSingleSpawnObjectPool<UI_OptionalPrincessCard>();
 
             AddUIEvent(UIEvent.UpdateSelectedPrincess, OnUpdateSelectedPrincess);
             AddUIEvent(UIEvent.ResetSelectPrincess, () => Root_SelectBar.GetComponent<ToggleGroup>().SetAllTogglesOff());
 
 
-            var princessDict = Battle.Instance._ToBeSelectedPrincessDict;
+            var princessDict = Battle.Instance._OptionalPrincessDict;
             foreach (var (key, value) in princessDict)
             {
-                GenerateSelectPrincessToggle(key, value);
+                UI_OptionalPrincessCard optionalPrincessCard = Spawn<UI_OptionalPrincessCard>();
+                optionalPrincessCard.Init(value.SelectedPrincessCardData, LoadIcon(value.PrincessType), value.isSelected);
             }
         }
 
@@ -81,27 +83,17 @@ namespace GameLogic
         {
             base.OnDestroy();
             GameModule.ObjectPool.DestroyObjectPool<UI_SelectedPrincessCard>();
+            GameModule.ObjectPool.DestroyObjectPool<UI_OptionalPrincessCard>();
         }
 
         private void OnUpdateSelectedPrincess()
         {
-            var dict = Battle.Instance._ToBeSelectedPrincessDict;
+            var dict = Battle.Instance._OptionalPrincessDict;
             var list = Battle.Instance._LeftPrincessCardList;
 
-            foreach (var (key, value) in dict)
-            {
-                if (_dict.TryGetValue(key, out SelectPrincessData data) == false)
-                {
-                    Log.Error("UI_SelectPrincess :: OnUpdateSelectedPrincess");
-                    return;
-                }
-
-                data.ToBeSelected.GetComponentInChildren<Toggle>().isOn = value;
-            }
-
-            UpdateSelectPrincessCard(list);
+            UpdateOptionalPrincessCard(dict);
+            UpdateSelectedPrincessCard(list);
         }
-
 
         protected override void OnUpdate()
         {
@@ -113,16 +105,16 @@ namespace GameLogic
                     break;
                 case EBattleType.Battle:
 
-                    List<PrincessCard> princessCardList = Battle.Instance._LeftPrincessCardList;
+                    List<SelectedPrincessCardData> princessCardList = Battle.Instance._LeftPrincessCardList;
 
                     for (int i = 0; i < princessCardList.Count; i++)
                     {
-                        PrincessCard princessCard = princessCardList[i];
-                        UI_SelectedPrincessCard selectedPrincessCard = _selectedPrincessCardList[i];
+                        SelectedPrincessCardData selectedPrincessCardData = princessCardList[i];
+                        UI_SelectedPrincessCard selectedPrincessCard = _selectedUIPrincessCardList[i];
 
-                        if (princessCard.PrincessType == selectedPrincessCard._PrincessType)
+                        if (selectedPrincessCardData.PrincessType == selectedPrincessCard._PrincessType)
                         {
-                            selectedPrincessCard.Init(princessCard);
+                            selectedPrincessCard.Init(selectedPrincessCardData, LoadIcon(selectedPrincessCardData.PrincessType));
                         }
                     }
 
@@ -141,42 +133,6 @@ namespace GameLogic
             }
         }
 
-
-        private void GenerateSelectPrincessToggle(EPrincessType princessType, bool isOn)
-        {
-            GameObject toggleObj = Object.Instantiate(Item_ToBeSelected, Root_ToBeSelectedBar);
-
-            if (_dict.TryGetValue(princessType, out SelectPrincessData data) == false)
-            {
-                data = new SelectPrincessData();
-                _dict.Add(princessType, data);
-            }
-
-            data.ToBeSelected ??= toggleObj;
-
-            toggleObj.name = princessType.ToString();
-            toggleObj.SetActive(true);
-
-            Toggle toggle = toggleObj.GetComponentInChildren<Toggle>();
-            Button button = toggleObj.GetComponentInChildren<Button>();
-            toggle.isOn = isOn;
-            toggle.interactable = false;
-            toggle.targetGraphic.GetComponent<Image>().sprite = LoadIcon(princessType);
-
-            button.onClick.AddListener(OnButtonClick);
-
-            void OnButtonClick()
-            {
-                if (toggle.isOn)
-                {
-                    Battle.Instance.SelectPrincessSystem.UnSelected(princessType);
-                }
-                else
-                {
-                    Battle.Instance.SelectPrincessSystem.Selected(princessType);
-                }
-            }
-        }
 
         private Dictionary<EPrincessType, SelectPrincessData> _dict = new Dictionary<EPrincessType, SelectPrincessData>();
 
@@ -215,6 +171,22 @@ namespace GameLogic
                     GameObject target = Object.Instantiate(Item_Select, Root_SelectBar);
                     ret = UI_SelectedPrincessCard.CreateInstance(target) as T;
                     _selectedPrincessCardPool.Register(ret as UI_SelectedPrincessCard, true);
+                }
+
+                return ret;
+            }
+
+            if (typeof(T) == typeof(UI_OptionalPrincessCard))
+            {
+                if (_optionalPrincessCardPool.CanSpawn())
+                {
+                    ret = _optionalPrincessCardPool.Spawn() as T;
+                }
+                else
+                {
+                    GameObject target = Object.Instantiate(Item_ToBeSelected, Root_ToBeSelectedBar);
+                    ret = UI_OptionalPrincessCard.CreateInstance(target) as T;
+                    _optionalPrincessCardPool.Register(ret as UI_OptionalPrincessCard, true);
                 }
 
                 return ret;

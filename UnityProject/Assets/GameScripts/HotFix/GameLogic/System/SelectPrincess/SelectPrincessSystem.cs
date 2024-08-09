@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GameConfig;
 using TEngine;
 
@@ -8,10 +9,17 @@ namespace GameLogic
     {
         public void Init()
         {
-            Dictionary<EPrincessType, bool> toBeSelectedPrincessDict = Battle.Instance._ToBeSelectedPrincessDict;
+            Dictionary<EPrincessType, OptionalPrincessCardData> toBeSelectedPrincessDict = Battle.Instance._OptionalPrincessDict;
             toBeSelectedPrincessDict.Clear();
-            toBeSelectedPrincessDict.Add(EPrincessType.CaoYeYouYi, false);
-            toBeSelectedPrincessDict.Add(EPrincessType.PeiKeLiMu, false);
+            OptionalPrincessCardData optionalPrincessCardData;
+
+            optionalPrincessCardData = MemoryPool.Acquire<OptionalPrincessCardData>();
+            optionalPrincessCardData.Init(EPrincessType.CaoYeYouYi);
+            toBeSelectedPrincessDict.Add(EPrincessType.CaoYeYouYi, optionalPrincessCardData);
+
+            optionalPrincessCardData = MemoryPool.Acquire<OptionalPrincessCardData>();
+            optionalPrincessCardData.Init(EPrincessType.PeiKeLiMu);
+            toBeSelectedPrincessDict.Add(EPrincessType.PeiKeLiMu, optionalPrincessCardData);
         }
 
         protected override void Awake()
@@ -27,47 +35,56 @@ namespace GameLogic
         public void ConfirmPrincessCard()
         {
             Battle.Instance.BattleType = EBattleType.Battle;
-
-            var config = ConfigSystem.Instance.Tables.TPrincessCard;
-            List<PrincessCard> _princessCardList = Battle.Instance._LeftPrincessCardList;
-            List<EPrincessType> list = Battle.Instance._SelectedPrincessList;
-            _princessCardList.Clear();
-            foreach (EPrincessType princessType in list)
-            {
-                _princessCardList.Add(PrincessCard.ToObject(config.Get(princessType)));
-            }
         }
 
         public void Selected(EPrincessType selectedPrincessType)
         {
-            Dictionary<EPrincessType, bool> toBeSelectedPrincessDict = Battle.Instance._ToBeSelectedPrincessDict;
-            List<EPrincessType> selectedPrincessList = Battle.Instance._SelectedPrincessList;
+            Dictionary<EPrincessType, OptionalPrincessCardData> toBeSelectedPrincessDict = Battle.Instance._OptionalPrincessDict;
+            List<SelectedPrincessCardData> selectedPrincessList = Battle.Instance._LeftPrincessCardList;
 
-            if (selectedPrincessList.Contains(selectedPrincessType) == true)
+            if (selectedPrincessList.Any(princessCard => princessCard.PrincessType == selectedPrincessType))
             {
                 Log.Error("SelectPrincessSystem :: Selected");
                 return;
             }
 
-            selectedPrincessList.Add(selectedPrincessType);
-            toBeSelectedPrincessDict[selectedPrincessType] = true;
+            SelectedPrincessCardData cardData = MemoryPool.Acquire<SelectedPrincessCardData>();
+            cardData.Init(selectedPrincessType);
+
+            selectedPrincessList.Add(cardData);
+            toBeSelectedPrincessDict[selectedPrincessType].isSelected = true;
+
             GameEvent.Send(UIEvent.UpdateSelectedPrincess);
         }
 
         public void UnSelected(EPrincessType selectedPrincessType)
         {
-            Dictionary<EPrincessType, bool> toBeSelectedPrincessDict = Battle.Instance._ToBeSelectedPrincessDict;
-            List<EPrincessType> selectedPrincessList = Battle.Instance._SelectedPrincessList;
+            Dictionary<EPrincessType, OptionalPrincessCardData> toBeSelectedPrincessDict = Battle.Instance._OptionalPrincessDict;
+            List<SelectedPrincessCardData> selectedPrincessList = Battle.Instance._LeftPrincessCardList;
 
-            if (selectedPrincessList.Contains(selectedPrincessType) == false)
+            bool isContains = false;
+
+            foreach (SelectedPrincessCardData princessCard in selectedPrincessList)
+            {
+                if (princessCard.PrincessType == selectedPrincessType)
+                {
+                    isContains = true;
+
+                    selectedPrincessList.Remove(princessCard);
+                    MemoryPool.Release(princessCard);
+                    toBeSelectedPrincessDict[selectedPrincessType].isSelected = false;
+
+                    GameEvent.Send(UIEvent.UpdateSelectedPrincess);
+
+                    break;
+                }
+            }
+
+            if (isContains == false)
             {
                 Log.Error("SelectPrincessSystem :: UnSelected");
                 return;
             }
-
-            selectedPrincessList.Remove(selectedPrincessType);
-            toBeSelectedPrincessDict[selectedPrincessType] = false;
-            GameEvent.Send(UIEvent.UpdateSelectedPrincess);
         }
     }
 }

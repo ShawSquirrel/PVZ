@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace GameLogic
 {
-    public class ASkill : ObjectBase, IUnit, IEntity, ISkill, IMove, IAttribute
+    public class ASkill : ObjectBaseWithInstance, IUnit, IEntity, ISkill, IMove, IAttribute
     {
         public Rigidbody _Rigid { get; set; }
 

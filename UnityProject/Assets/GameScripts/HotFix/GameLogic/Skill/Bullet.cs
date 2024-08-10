@@ -59,12 +59,10 @@ namespace GameLogic
             Object.Destroy(_Obj);
         }
 
-        public static Bullet CreateInstance()
+        public override GameObject GetInstance()
         {
-            Bullet ret = MemoryPool.Acquire<Bullet>();
             GameObject target = Object.Instantiate(GameModule.Resource.LoadAsset<GameObject>("Skill_Bullet"));
-            ret.Initialize_Out(target);
-            return ret;
+            return target;
         }
     }
 }

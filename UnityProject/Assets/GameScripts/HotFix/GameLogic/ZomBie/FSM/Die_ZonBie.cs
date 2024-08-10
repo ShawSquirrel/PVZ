@@ -11,7 +11,11 @@ namespace GameLogic
             base.OnEnter(fsm);
             
             fsm.Owner._Rigid.velocity = Vector3.zero;
-            fsm.Owner._Anim.Play(EAnimState.Die, false, () => fsm.Owner.Die());
+            fsm.Owner._Anim.Play(EAnimState.Die, false, () =>
+            {
+                fsm.Owner.Die();
+                ChangeState<Empty_ZonBie>(fsm);
+            });
         }
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace GameLogic
 {
-    public class AMapItem : ObjectBase, IEntity, IMapItem, IUnit, IPlanted
+    public class AMapItem : ObjectBaseWithInstance, IEntity, IMapItem, IUnit, IPlanted
     {
         public GameObject _Obj { get; set; }
         public Transform _TF { get; set; }
@@ -49,13 +49,11 @@ namespace GameLogic
         {
             _Obj.GetComponent<SpriteRenderer>().color = color;
         }
-        
-        public static T CreateInstance<T>() where T : ObjectBase, new()
+
+        public override GameObject GetInstance()
         {
-            T ret = MemoryPool.Acquire<T>();
             GameObject target = Object.Instantiate(GameModule.Resource.LoadAsset<GameObject>("MapItem"));
-            ret.Initialize_Out(target);
-            return ret;
+            return target;
         }
     }
 }

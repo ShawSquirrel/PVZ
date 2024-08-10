@@ -9,7 +9,11 @@ namespace GameLogic
         {
             base.OnEnter(fsm);
             fsm.Owner.DisableCollider();
-            fsm.Owner._Anim.Play(EAnimState.Die, false, () => fsm.Owner.Die());
+            fsm.Owner._Anim.Play(EAnimState.Die, false, () =>
+            {
+                ChangeState<Empty_Princess>(fsm);
+                fsm.Owner.Die();
+            });
         }
     }
 }

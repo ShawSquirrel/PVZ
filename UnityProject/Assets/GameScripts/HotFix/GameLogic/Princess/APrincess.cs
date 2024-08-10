@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace GameLogic
 {
-    public class APrincess : ObjectBase, IPrincess, IUnit, IPlant, IAnim, IActorFSM<APrincess>, IAttribute, IAttack, IDie, IDamage, IBoxCollider
+    public class APrincess : ObjectBaseWithInstance, IPrincess, IUnit, IPlant, IAnim, IActorFSM<APrincess>, IAttribute, IAttack, IDie, IDamage, IBoxCollider
     {
         public GameObject _Obj { get; set; }
         public Transform _TF { get; set; }
@@ -15,6 +15,24 @@ namespace GameLogic
         public AttributeDictionary _AttributeDict { get; set; } = new AttributeDictionary();
 
         public virtual EPrincessType PrincessType { get; }
+
+        protected override void EndObjectInitialize()
+        {
+            _Obj = Target as GameObject;
+            _TF = _Obj.transform;
+            _Anim = _TF.Find("Body").GetComponent<IAnimComponent>();
+            _TF.Find("Body").gameObject.AddComponent<Reference>().Entity = this;
+            _BoxCollider = _TF.Find("Body").GetComponent<BoxCollider>();
+
+            _FSM = GameModule.Fsm.CreateFsm($"{PrincessType.ToString()} {GetHashCode()}", this, new List<FsmState<APrincess>>()
+            {
+                new Empty_Princess(),
+                new Attack_Princess(),
+                new Idle_Princess(),
+                new Die_Princess(),
+            });
+            _FSM.Start<Empty_Princess>();
+        }
 
         protected override void Release(bool isShutdown)
         {
@@ -28,7 +46,7 @@ namespace GameLogic
         {
             base.OnSpawn();
             DisableCollider();
-           
+            _IsDie = true;
             _Obj.SetActiveSelf(true);
         }
 
@@ -36,23 +54,14 @@ namespace GameLogic
         {
             base.OnUnSpawn();
             _Obj.SetActiveSelf(false);
+            _IsDie = true;
         }
 
-        protected override void EndObjectInitialize()
-        {
-            _Obj = Target as GameObject;
-            _TF = _Obj.transform;
-            _Anim = _TF.Find("Body").GetComponent<IAnimComponent>();
-            _TF.Find("Body").gameObject.AddComponent<Reference>().Entity = this;
-            _BoxCollider = _TF.Find("Body").GetComponent<BoxCollider>();
-        }
 
-        public static T CreateInstance<T>(EPrincessType princessType) where T : ObjectBase, new()
+        public override GameObject GetInstance()
         {
-            T ret = MemoryPool.Acquire<T>();
-            GameObject target = Object.Instantiate(GameModule.Resource.LoadAsset<GameObject>($"Princess_{princessType}"));
-            ret.Initialize_Out(target);
-            return ret;
+            GameObject target = Object.Instantiate(GameModule.Resource.LoadAsset<GameObject>($"Princess_{PrincessType}"));
+            return target;
         }
 
         public virtual bool Plant(MapData mapData)
@@ -62,18 +71,9 @@ namespace GameLogic
 
         public virtual void PlantCallBack(MapData mapData)
         {
-            _Anim.ResetAnim();
-            // _Anim.Continue();
-            _FSM = GameModule.Fsm.CreateFsm($"{PrincessType.ToString()} {GetHashCode()}", this, new List<FsmState<APrincess>>()
-            {
-                new Attack_Princess(),
-                new Idle_Princess(),
-                new Die_Princess(),
-            });
-            _FSM.Start<Idle_Princess>();
             _IsDie = false;
             EnableCollider();
-            
+
 
             _TF.transform.position = mapData._MapItem._TF.position;
         }
@@ -85,14 +85,13 @@ namespace GameLogic
 
         public virtual async UniTask Attack()
         {
+            await UniTask.CompletedTask;
         }
 
         public bool _IsDie { get; set; }
 
         public virtual void Die()
         {
-            // _Anim.ResetAnim();
-            GameModule.Fsm.DestroyFsm<APrincess>(_FSM.Name);
         }
 
         public void Damage(float attack)

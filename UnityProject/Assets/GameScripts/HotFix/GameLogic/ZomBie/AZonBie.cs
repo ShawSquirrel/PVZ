@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace GameLogic
 {
-    public class AZonBie : ObjectBase, IEntity, IZomBie, IUnit, IAnim, IMove, ITrigger, IAttribute, IDie, IActorFSM<AZonBie>, IAttack
+    public class AZonBie : ObjectBaseWithInstance, IEntity, IZomBie, IUnit, IAnim, IMove, ITrigger, IAttribute, IDie, IActorFSM<AZonBie>, IAttack
     {
         public virtual EZombieType ZombieType { get; }
 
@@ -20,6 +20,32 @@ namespace GameLogic
         public bool _IsDie { get; set; } = false;
 
 
+        protected override void EndObjectInitialize()
+        {
+            _Obj = Target as GameObject;
+            _TF = _Obj.transform;
+            _Anim = _TF.Find("Body").GetComponent<IAnimComponent>();
+            _Rigid = _Obj.GetComponent<Rigidbody>();
+
+            _FSM = GameModule.Fsm.CreateFsm($"{ZombieType} {GetHashCode()}", this, new List<FsmState<AZonBie>>()
+            {
+                new Empty_ZonBie(),
+                new Idle_ZonBie(),
+                new Attack_ZonBie(),
+                new Walk_ZonBie(),
+                new Die_ZonBie(),
+            });
+            _FSM.Start<Empty_ZonBie>();
+            
+            _Trigger3DEvent = _TF.Find("Body").gameObject.AddComponent<Trigger3DEvent>();
+            _Trigger3DEvent._Entity = this;
+            _Trigger3DEvent.TriggerStay3DAction += OnTriggerStay3DAction;
+            _Trigger3DEvent.TriggerEnter3DAction += OnTriggerEnter3DAction;
+            _Trigger3DEvent.TriggerExit3DAction += OnTriggerExit3DAction;
+
+            _IsDie = true;
+        }
+
         protected override void Release(bool isShutdown)
         {
             if (_Obj != null)
@@ -31,40 +57,17 @@ namespace GameLogic
         protected override void OnSpawn()
         {
             base.OnSpawn();
-            _Anim.ResetAnim();
-            _FSM = GameModule.Fsm.CreateFsm($"{ZombieType} {GetHashCode()}", this, new List<FsmState<AZonBie>>()
-            {
-                new Attack_ZonBie(),
-                new Idle_ZonBie(),
-                new Walk_ZonBie(),
-                new Die_ZonBie()
-            });
-            _FSM.Start<Walk_ZonBie>();
             _Obj.SetActiveSelf(true);
+            _IsDie = false;
         }
 
         protected override void OnUnSpawn()
         {
             base.OnUnSpawn();
-            GameModule.Fsm.DestroyFsm<AZonBie>(_FSM.Name);
             _Obj.SetActiveSelf(false);
+            _IsDie = true;
         }
 
-        protected override void EndObjectInitialize()
-        {
-            _Obj = Target as GameObject;
-            _TF = _Obj.transform;
-            _Anim = _TF.Find("Body").GetComponent<IAnimComponent>();
-            _Rigid = _Obj.GetComponent<Rigidbody>();
-
-            
-
-            _Trigger3DEvent = _TF.Find("Body").gameObject.AddComponent<Trigger3DEvent>();
-            _Trigger3DEvent._Entity = this;
-            _Trigger3DEvent.TriggerStay3DAction += OnTriggerStay3DAction;
-            _Trigger3DEvent.TriggerEnter3DAction += OnTriggerEnter3DAction;
-            _Trigger3DEvent.TriggerExit3DAction += OnTriggerExit3DAction;
-        }
 
         protected virtual void OnTriggerEnter3DAction(Collider collider)
         {
@@ -98,14 +101,12 @@ namespace GameLogic
         {
         }
 
-        public static T CreateInstance<T>(EZombieType zombieType) where T : ObjectBase, new()
+        public override GameObject GetInstance()
         {
-            T ret = MemoryPool.Acquire<T>();
-            GameObject target = Object.Instantiate(GameModule.Resource.LoadAsset<GameObject>($"ZomBie_{zombieType}"));
-            ret.Initialize_Out(target);
-            return ret;
-        }
+            GameObject target = Object.Instantiate(GameModule.Resource.LoadAsset<GameObject>($"ZomBie_{ZombieType}"));
 
+            return target;
+        }
 
         public virtual void Die()
         {
@@ -120,6 +121,5 @@ namespace GameLogic
         {
             await UniTask.CompletedTask;
         }
-
     }
 }

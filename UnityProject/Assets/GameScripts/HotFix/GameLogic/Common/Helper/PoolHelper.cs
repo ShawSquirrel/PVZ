@@ -1,67 +1,33 @@
 ﻿using System;
 using GameConfig;
 using TEngine;
+using UnityEngine;
 
 namespace GameLogic
 {
     public static class PoolHelper
     {
-        public static T Spawn<T>() where T : ObjectBase, new()
+        public static T Spawn<T>() where T : ObjectBaseWithInstance, new()
         {
-            T ret = null;
-            Type type = typeof(T);
+            T ret;
             IObjectPool<T> objectPool = GameModule.ObjectPool.GetObjectPool<T>();
             objectPool ??= GameModule.ObjectPool.CreateSingleSpawnObjectPool<T>();
-            
+
             if (objectPool.CanSpawn())
             {
                 ret = objectPool.Spawn();
             }
             else
             {
-                if (type == typeof(MapItem_Space))
-                {
-                    ret = AMapItem.CreateInstance<MapItem_Space>() as T;
-                }
-                else if (type == typeof(MapItem_Grassland))
-                {
-                    ret = AMapItem.CreateInstance<MapItem_Grassland>() as T;
-                }
+                ret = MemoryPool.Acquire<T>();
+                ret.Initialize_Out(ret.GetInstance());
                 
-                
-                
-                else if (type == typeof(Princess_CaoYeYouYi))
-                {
-                    ret = APrincess.CreateInstance<Princess_CaoYeYouYi>(EPrincessType.CaoYeYouYi) as T;
-                }
-                else if (type == typeof(Princess_PeiKeLiMu))
-                {
-                    ret = APrincess.CreateInstance<Princess_PeiKeLiMu>(EPrincessType.PeiKeLiMu) as T;
-                }
-                
-                
-                else if (type == typeof(ZomBie_CaoYeYouYi))
-                {
-                    ret = AZonBie.CreateInstance<ZomBie_CaoYeYouYi>(EZombieType.CaoYeYouYi) as T;
-                }
-                else if (type == typeof(ZomBie_PeiKeLiMu))
-                {
-                    ret = AZonBie.CreateInstance<ZomBie_PeiKeLiMu>(EZombieType.PeiKeLiMu) as T;
-                }
-
-                else if (type == typeof(Bullet))
-                {
-                    ret = Bullet.CreateInstance() as T;
-                }
-
-                
-                
-                
-                objectPool.Register(ret,true);
+                objectPool.Register(ret, true);
             }
 
             return ret;
         }
+
         public static void UnSpawn<T>(T needUnSpawn) where T : ObjectBase, new()
         {
             IObjectPool<T> objectPool = GameModule.ObjectPool.GetObjectPool<T>();
@@ -71,7 +37,13 @@ namespace GameLogic
                 Log.Error($"UnSpawn Error Type : {typeof(T)}");
                 return;
             }
+
             objectPool.Unspawn(needUnSpawn);
         }
+    }
+
+    public interface IGetInstance
+    {
+        public GameObject GetInstance();
     }
 }
